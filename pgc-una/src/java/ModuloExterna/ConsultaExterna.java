@@ -252,7 +252,7 @@ public class ConsultaExterna {
         addFilterFactura("numero", facturaLocal.getNumero());
         addFilterFactura("numeroOrden", facturaLocal.getNumeroOrden());
         if(!valuesFactura.isEmpty() && !nombresFactura.isEmpty() && valuesFactura.size() == nombresFactura.size()){
-            ArrayList<FacturaLocal> auxLista = new ArrayList(facturaFacade.findByParameters(nombresFactura, valuesFactura));
+            ArrayList<Factura> auxLista = new ArrayList(facturaFacade.findByParameters(nombresFactura, valuesFactura));
             for(Factura f : auxLista){
                 FacturaLocal fl =  new FacturaLocal(f);
                 fl.setEnvios(getEnvios(f));

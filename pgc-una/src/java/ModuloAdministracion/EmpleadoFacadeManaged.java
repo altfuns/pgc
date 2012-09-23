@@ -8,6 +8,8 @@ import cr.ac.una.cgi.pgc.entity.Empleado;
 import cr.ac.una.cgi.pgc.session.EmpleadoFacadeRemote;
 import cr.ac.una.cgi.pgc.session.PermisoFacadeRemote;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -179,22 +181,25 @@ public class EmpleadoFacadeManaged implements Logeable{
      */
     public ArrayList<Empleado> getEmpleados(){
         seguridad();
+        ArrayList<Empleado> result = new ArrayList<Empleado>();
         try{
-            return auxEmpleado.getEmpleados();
+            result = auxEmpleado.getEmpleados();
+
         }
         catch(Exception e){
             try{
                 auxEmpleado.setEmpleados(empleadoFacade.findAll());
-                return auxEmpleado.getEmpleados();
+                result = auxEmpleado.getEmpleados();
             }
             catch(Exception x){
                 errorMensaje = "No se pudo acceder a la información, verifique su conexión y vuelva a intentar.";                
                 erroresVisible = true;
+                result = auxEmpleado.getEmpleadosVacios();
             }
             
         }
-        
-        return auxEmpleado.getEmpleadosVacios();
+        Collections.sort(result, empleadosComparator);
+        return result;
     }
 
     public String getMensajeError(){
@@ -283,6 +288,21 @@ public class EmpleadoFacadeManaged implements Logeable{
 
     AuxEmpleado auxEmpleado;
     Empleado auxiliarCambios;
+
+    Comparator<Empleado> empleadosComparator = new Comparator<Empleado>(){
+
+        @Override
+        public int compare(Empleado e1, Empleado e2) {
+            int result = 1;
+            if(e1.getActivo() == e2.getActivo()){
+                result = e1.getNombre().compareToIgnoreCase(e2.getNombre());
+            }else{
+                result = e1.getActivo() && !e2.getActivo()? -1 : 1;
+            }
+            return result;
+        }
+
+    };
 
     //</editor-fold>
 
