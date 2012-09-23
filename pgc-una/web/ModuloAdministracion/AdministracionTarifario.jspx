@@ -102,11 +102,11 @@
                                             <f:selectItem id="sit_prioridad7" itemLabel="Tarjetas Postales Internacionales" itemValue="7" itemDisabled="#{TarifaFacadeManaged.auxTarifa.tarjetasVisible}"/>
                                         </ice:selectOneListbox>
                                     </ice:panelGrid>                                    
-                                    <ice:dataTable id="dt_tarifario" sortColumn="dc_peso" sortAscending="true" value="#{TarifaFacadeManaged.consultados}" var="tarifa" rows="#{TarifaFacadeManaged.auxTarifa.cantidadTarifas}" width="100%" style="vertical-align: top;">
+                                    <ice:dataTable id="dt_tarifario" sortColumn="peso_inicio"  sortAscending="true" value="#{TarifaFacadeManaged.consultados}" var="tarifa" rows="#{TarifaFacadeManaged.auxTarifa.cantidadTarifas}" width="100%" style="vertical-align: top;">
                                         <f:facet name="header">
                                             <ice:outputText id="ot_tituloTarifario" value="Tarifario de Correos de Costa Rica" />
                                         </f:facet>
-                                        <ice:column id="dc_peso" >
+                                        <ice:column id="dc_peso">
                                             <f:facet name="header">
                                                 <ice:outputText id="ot_pesoT" value="Peso (g)" />
                                             </f:facet>

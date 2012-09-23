@@ -1445,7 +1445,7 @@ public final class AdministracionTarifario_jspx extends org.apache.jasper.runtim
     _jspx_th_ice_dataTable_0.setVar("tarifa");
     _jspx_th_ice_dataTable_0.setValue("#{TarifaFacadeManaged.consultados}");
     _jspx_th_ice_dataTable_0.setSortAscending("true");
-    _jspx_th_ice_dataTable_0.setSortColumn("dc_peso");
+    _jspx_th_ice_dataTable_0.setSortColumn("peso_inicio");
     _jspx_th_ice_dataTable_0.setId("dt_tarifario");
     int _jspx_eval_ice_dataTable_0 = _jspx_th_ice_dataTable_0.doStartTag();
     if (_jspx_eval_ice_dataTable_0 != javax.servlet.jsp.tagext.Tag.SKIP_BODY) {

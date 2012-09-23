@@ -9,6 +9,8 @@ import cr.ac.una.cgi.pgc.entity.Empleado;
 import cr.ac.una.cgi.pgc.entity.Tarifa;
 import cr.ac.una.cgi.pgc.session.TarifaFacadeRemote;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
@@ -125,24 +127,24 @@ public class TarifaFacadeManaged implements Logeable{
     public ArrayList<Tarifa> getConsultados(){
 
         seguridad();
-
+        ArrayList<Tarifa> result = new ArrayList<Tarifa>();
         try{
-            return auxTarifa.getConsultados();
+            result = auxTarifa.getConsultados();
         }
         catch(Exception e){
             try{
                 auxTarifa.setTarifario(tarifaFacade.findAll());
                 infoFooter = "Datos cargados exitosamente.";
                 dispararEfecto();
-                return auxTarifa.getConsultados();
+                result = auxTarifa.getConsultados();
             }
             catch(Exception x){
                 mensajeError = "No se pudo acceder a la información del sistema. Revise la conexión con el servidor y vuelva a intentarlo.";
                 errorVisible = true;
             }
         }
-        
-        return new ArrayList<Tarifa>();
+        Collections.sort(result, tarifaComparator);
+        return result;
     }
 
     public Highlight getEfecto(){
@@ -222,6 +224,15 @@ public class TarifaFacadeManaged implements Logeable{
         return auxTarifa;
     }
 
-    private AuxTarifa auxTarifa;    
+    private AuxTarifa auxTarifa;
+
+    Comparator<Tarifa> tarifaComparator = new Comparator<Tarifa>(){
+
+        @Override
+        public int compare(Tarifa t1, Tarifa t2) {
+            return Double.compare(t1.getPesoInicio(), t2.getPesoInicio());
+        }
+
+    };
 
 }
