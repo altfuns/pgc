@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Original: Lisset Rosales Alpízar
+    Revisado por: Jeremy Guzmán Salazar
+
+    Creado:
+        05  enero   2010.
+
+    Revisiones:
+        06  febrero 2010.
+        07  febrero 2010.
+
+    Lista de requerimientos:
+        * Funcionales: En proceso
+        * No funcionales: En Proceso
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Revisar con el equipo.
+        * Implementación de Beans.
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>Administración de Empleados</title>
+            </head>
+            <body>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGrid columns="4" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" style="logoUNA" />
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" style="logoPGC" />
+                                <ice:outputText id="slider" value="SLIDER"></ice:outputText>
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <!-- Correspondecia Interna menu -->
+                                            <ice:menuItem value="Interna"
+                                                          id="file" onclick="return false;">
+                                                <ice:menuItem action=""
+                                                              id="ingEnvios"
+                                                              value="Ingresar Envíos">
+                                                    <f:param name="myParam"
+                                                             value="Ingresar"/>
+                                                </ice:menuItem>
+                                            </ice:menuItem>
+
+                                            <!-- Correspondencia Externa menu -->
+                                            <ice:menuItem value="Externa"
+                                                          id="edit" onclick="return false;">
+                                                <ice:menuItem id="facturas"
+                                                              value="Facturas"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="notas"
+                                                              value="Notas"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="envios"
+                                                              value="Envíos"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="presupuesto"
+                                                              value="Presupuesto"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="consulta"
+                                                              value="Consulta"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                            </ice:menuItem>
+
+                                            <!-- View menu -->
+                                            <ice:menuItem value="Salir" id="salir" onclick="return false;">
+                                            </ice:menuItem>
+
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td>
+                            <ice:form id="frm_principal">
+                                <ice:panelGrid id="pgrd_principal" columns="2">
+                                    <ice:panelCollapsible id="pclp_nuevosEmpleados" expanded="true">
+                                        <f:facet name="header">
+                                            <ice:outputText id="ot_tituloIngreso" value="Ingreso de Empleados" />
+                                        </f:facet>
+                                        <ice:panelGrid id="pgrd_nuevosEmpleados" columns="2">
+                                            <ice:panelGrid id="pgrd_formulario" columns="2" cellspacing="5">
+                                                <ice:outputText id="ot_Identificacion" value="Número de cédula:" />
+                                                <ice:selectInputText id="sit_Identificacion" value="PI" width="115" />
+                                                <ice:outputText id="ot_nombre" value="Nombre: " />
+                                                <ice:selectInputText id="sit_nombre" value="PI" width="115"/>
+                                                <ice:outputText id="ot_segNombre" value="Segundo nombre:" />
+                                                <ice:selectInputText id="sit_segNombre" value="PI" width="115" />
+                                                <ice:outputText id="ot_apellidos" value="Apellidos:" />
+                                                <ice:selectInputText id="sit_apellidos" value="PI" width="115" />
+                                                <ice:outputText id="ot_cargo" value="Cargo:" />
+                                                <ice:selectOneMenu id="som_cargo" />
+                                                <ice:commandButton id="cb_guardarE" value="Guardar Empleado" />
+                                            </ice:panelGrid>
+                                            <ice:panelGrid id="pgrd_consultaEmpleados">
+                                                <ice:dataTable id="dt_consultaEmpleados">
+                                                    <ice:column id="dc_identificacion">
+                                                        <f:facet name="header">
+                                                            <ice:outputText id="ot_identificacionT" value="Número de Cédula" />
+                                                        </f:facet>
+                                                        <ice:outputText id="ot_identificacionC" value="PI" />
+                                                    </ice:column>
+                                                    <ice:column id="dc_nombre">
+                                                        <f:facet name="header">
+                                                            <ice:outputText id="ot_nombreT" value="Nombre" />
+                                                        </f:facet>
+                                                        <ice:outputText id="ot_nombreC" value="PI" />
+                                                    </ice:column>
+                                                </ice:dataTable>
+                                            </ice:panelGrid>
+                                        </ice:panelGrid>
+                                    </ice:panelCollapsible>
+                                    <ice:panelCollapsible id="pclp_eliminarEmpleados" expanded="true" style="valign: top;">
+                                        <f:facet name="header">
+                                            <ice:outputText id="ot_tituloE" value="Eliminación de Empleados"/>
+                                        </f:facet>
+                                        <ice:panelGrid id="pgrd_formularioE" columns="2" cellspacing="5">
+                                            <ice:outputText id="ot_identificacionE" value="Número de cédula:" />
+                                            <ice:selectInputText id="sit_identificacionE" value="PI" width="115" />
+                                            <ice:commandButton id="cb_eliminarE" value="Eliminar empleado" />
+                                        </ice:panelGrid>
+                                    </ice:panelCollapsible>
+                                </ice:panelGrid>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer">
+                                <ice:outputText id="south" value="Barra de estado"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

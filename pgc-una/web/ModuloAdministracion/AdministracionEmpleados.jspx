@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Original: Lisset Rosales Alpízar
+    Revisado por: Jeremy Guzmán Salazar
+
+    Creado:
+        05  enero   2010.
+
+    Revisiones:
+        06  febrero 2010.
+        07  febrero 2010.
+
+    Lista de requerimientos:
+        * Funcionales: En proceso
+        * No funcionales: En Proceso
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Revisar con el equipo.
+        * Implementación de Beans.
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>UNA | Oficina Postal | Administración de Empleados</title>
+            </head>
+            <body>
+                <table width="100%" style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="100%" valign="top" style="height:100%">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Administración | Administración de Empleados" />
+                            </p>
+                            <ice:form id="frm_paneles">
+                                <ice:panelPopup id="ppop_errores"
+                                                draggable="false" modal="true"
+                                                visible="#{EmpleadoFacadeManaged.errorVisible}"
+                                                styleClass="corePopup">
+                                    <f:facet name="header">
+                                        <ice:panelGroup styleClass="popupHeaderWrapper">
+                                            <ice:outputText
+                                                value="Error"
+                                                styleClass="popupHeaderText"/>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                    <f:facet name="body">
+                                        <ice:panelGroup styleClass="popupBody">
+                                            <ice:outputText value="#{EmpleadoFacadeManaged.mensajeError}"/><br/>
+                                            <p align="center">
+                                                <ice:commandButton id="modalPnlCloseButton" type="submit"
+                                                                   value="Cerrar" actionListener="#{EmpleadoFacadeManaged.action_cb_cerrarPopup}" /></p>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                </ice:panelPopup>                     
+                            </ice:form>
+                            <table width="100%">
+                                <tr valign="top">
+                                    <td width="25%">
+                                        <ice:form id="frm_formulario">
+                                            <ice:panelCollapsible id="pclp_formulario" expanded="true" style="vertical-align:top;">
+                                                <f:facet name="header">
+                                                    <ice:outputText id="ot_tituloFormulario" value="Ingreso de empleados." />
+                                                </f:facet>
+                                                <ice:panelGrid id="pgrd_formulario" columns="2" cellspacing="5">
+                                                    <ice:outputText id="ot_Identificacion" value="Número de cédula: " />
+                                                    <ice:inputText id="sit_Identificacion" value="#{EmpleadoFacadeManaged.auxEmpleado.empleadoIngreso.id}" maxlength="9"/>
+                                                    <ice:outputText id="ot_nombre" value="Nombre: " />
+                                                    <ice:inputText id="it_nombre" partialSubmit="true" value="#{EmpleadoFacadeManaged.auxEmpleado.empleadoIngreso.nombre}" maxlength="45" />
+                                                    <ice:outputText id="ot_segNombre" value="Segundo nombre: " />
+                                                    <ice:inputText id="sit_segNombre" partialSubmit="true" value="#{EmpleadoFacadeManaged.auxEmpleado.empleadoIngreso.middleName}" maxlength="45" />
+                                                    <ice:outputText id="ot_apellidos" value="Apellidos: " />
+                                                    <ice:inputText id="it_apellidos" partialSubmit="true" value="#{EmpleadoFacadeManaged.auxEmpleado.empleadoIngreso.apellidos}" maxlength="80" />
+                                                    <ice:outputText id="ot_cargo" value="Cargo: " />
+                                                    <ice:selectOneMenu id="som_cargo" value="#{EmpleadoFacadeManaged.auxEmpleado.cargo}">
+                                                        <f:selectItem id="sits_cargoJ" itemLabel="Jefe" itemValue="1" />
+                                                        <f:selectItem id="sits_cargoS" itemLabel="Secretaria (o)" itemValue="2" />
+                                                        <f:selectItem id="sits_cargoM" itemLabel="Mensajero" itemValue="3" />
+                                                    </ice:selectOneMenu>
+                                                    <ice:panelConfirmation id="pcrf_agregarEmpleado" acceptLabel="Si" cancelLabel="No"
+                                                                           autoCentre="true" message="¿Desea agregar a #{EmpleadoFacadeManaged.auxEmpleado.empleadoIngreso.nombre} #{EmpleadoFacadeManaged.auxEmpleado.empleadoIngreso.middleName} #{EmpleadoFacadeManaged.auxEmpleado.empleadoIngreso.apellidos}?"
+                                                                           title="¡Atención!" />
+                                                    <ice:commandButton id="cb_guardarE" panelConfirmation="pcrf_agregarEmpleado"
+                                                                       partialSubmit="true" value="Guardar Empleado" actionListener="#{EmpleadoFacadeManaged.action_cb_guardarEmpleado}" />
+                                                </ice:panelGrid>
+                                            </ice:panelCollapsible>
+                                        </ice:form>
+                                    </td><td width="75%">
+                                        <ice:form id="frm_modificacionEmpleado">
+                                            <ice:panelCollapsible id="pclp_administracion" expanded="true" style="vertical-align: top;">
+                                                <f:facet name="header">
+                                                    <ice:outputText id="ot_tituloAdministracion" value="Modificación de empleados." />
+                                                </f:facet>
+                                                <ice:panelGroup id="pgrp_consultaEmpleados">
+                                                    <ice:dataTable id="dt_consultaEmpleados" sortColumn="dc_habilitar" value="#{EmpleadoFacadeManaged.empleados}" var="empleado" rows="#{EmpleadoFacadeManaged.cantidadEmpleados}" >
+                                                        <ice:column id="dc_identificacion">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_identificacionT" value="Número de Cédula" />
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_identificacionC" value="#{empleado.id}" />
+                                                        </ice:column>
+                                                        <ice:column id="dc_cargo">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_cargoT" value="Cargo" />
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_cargoC" value="#{empleado.tipo.descripcion}" />
+                                                        </ice:column>
+                                                        <ice:column id="dc_nombre">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_nombreT" value="Nombre" />
+                                                            </f:facet>
+                                                            <ice:inputText id="sit_nombreC" value="#{empleado.nombre}" />
+                                                        </ice:column>
+                                                        <ice:column id="dc_middleName">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_middleNameT" value="Segundo Nombre" />
+                                                            </f:facet>
+                                                            <ice:inputText id="sit_middleNameT" value="#{empleado.middleName}" />
+                                                        </ice:column>
+                                                        <ice:column id="dc_apellidos">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_apellidos" value="Apellidos" />
+                                                            </f:facet>
+                                                            <ice:inputText id="sit_apellidos" value="#{empleado.apellidos}" />
+                                                        </ice:column>
+                                                        <ice:column id="dc_habilitar">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_habilitar" value="Activo"/>
+                                                            </f:facet>
+                                                            <ice:selectBooleanCheckbox id="sbc_habilitar" value="#{empleado.activo}" />
+                                                        </ice:column>
+                                                    </ice:dataTable>
+                                                    <ice:panelConfirmation id="pcrf_guardarCambios" acceptLabel="Si" cancelLabel="No"
+                                                                           autoCentre="true" message="¿Desea guardar los cambios dentro de la tabla?"
+                                                                           title="¡Atención!" />
+                                                    <p align="center">
+                                                        <ice:commandButton id="cb_actualizar" panelConfirmation="pcrf_guardarCambios" partialSubmit="true" value="Guardar Cambios" actionListener="#{EmpleadoFacadeManaged.action_cb_guardarCambios}" />
+                                                    </p>
+                                                </ice:panelGroup>
+                                            </ice:panelCollapsible>
+                                        </ice:form>                                        
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer" effect="#{EmpleadoFacadeManaged.efecto}">
+                                <ice:outputText id="south" value="#{EmpleadoFacadeManaged.infoFooter}"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

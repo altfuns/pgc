@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Original: Jeremy Guzmán Salazar
+    Revisado por:
+
+    Creado:
+        08  febrero 2010.
+
+    Revisiones:
+
+    Lista de requerimientos:
+        * Funcionales: En proceso
+        * No funcionales: En Proceso
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Implementar Beans
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>UNA | Oficina Postal | Administración de Permisos</title>
+            </head>
+            <body>
+                <table width="100%" style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="100%" valign="top" style="height:100%">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Administración | Administración de Permisos" />                                
+                            </p>
+                            <table width="100%"><tr><td width="50%">
+                                        <ice:form id="frm_sinAsignar">
+                                            <ice:panelGrid id="pgrd_sinAsignar" columns="2" cellpadding="10">
+                                                <ice:panelGroup id="pgrp_seleccionTipoP">
+                                                    <ice:panelGroup id="pgrp_TipoP">
+                                                        <p align="center"><ice:outputText id="ot_TipoP" value="Permisos asignados a:" /></p>
+                                                        <ice:selectOneRadio layout="pageDirection" id="sol_TipoP" partialSubmit="true" value="#{PermisoFacadeManaged.auxPermiso.tipoP}"
+                                                                            autocomplete="true" valueChangeListener="#{PermisoFacadeManaged.valueChange_sol_cambiarTipoP}" style="width: 150%;">
+                                                            <f:selectItem id="sit_cargo" itemValue="Cargo" itemLabel="Cargo" />
+                                                            <f:selectItem id="sit_empleado" itemValue="Empleado" itemLabel="Empleado" />
+                                                        </ice:selectOneRadio>
+                                                    </ice:panelGroup>
+                                                </ice:panelGroup>
+                                                <ice:panelGrid id="pgrd_porAsignar" columns="1">
+                                                    <ice:panelGrid id="pgrd_modulo" columns="2">
+                                                        <ice:outputText id="ot_modulo" value="Módulo:" />
+                                                        <ice:selectOneMenu id="som_modulo" value="#{PermisoFacadeManaged.auxPermiso.moduloSel}" partialSubmit="true" valueChangeListener="#{PermisoFacadeManaged.valueChange_som_cambiarPermisos}">
+                                                            <f:selectItem id="sit_modulo1" itemValue="rutas" itemLabel="Interna - Externa por Mensajero Propio" />
+                                                            <f:selectItem id="sit_modulo2" itemValue="externa" itemLabel="Vía Correos de Costa Rica" />
+                                                            <f:selectItem id="sit_modulo3" itemValue="administracion" itemLabel="Módulo Administrativo" />                                                            
+                                                        </ice:selectOneMenu>
+                                                    </ice:panelGrid>
+                                                    <p align="center">
+                                                        <ice:outputText value="Permisos sin asignar" />
+                                                        <ice:selectOneListbox id="sol_porAsignar" size="8" partialSubmit="true" style="width: 100%;" valueChangeListener="#{PermisoFacadeManaged.valueChange_sol_seleccionarPermisoNoAsignado}">
+                                                            <f:selectItems id="sits_permisosN" value="#{PermisoFacadeManaged.itemesNoAsignados}" />
+                                                        </ice:selectOneListbox>
+                                                    </p>
+                                                </ice:panelGrid>
+                                            </ice:panelGrid>
+                                        </ice:form>
+                                    </td><td>
+                                        <ice:form id="frm_asignadas">
+                                            <ice:panelGrid id="pgrd_asignadas" columns="2" cellpadding="15">
+                                                <ice:panelGrid id="pgrd_acciones" columns="2">
+                                                    <ice:commandButton id="cb_desasignar" image="../resources/rime/css-images/cal_arrow_left_dis.gif" value="Desasignar" partialSubmit="true" actionListener="#{PermisoFacadeManaged.action_cb_removerPermiso}" />
+                                                    <ice:commandButton id="cb_asignar" image="../resources/rime/css-images/cal_arrow_right_dis.gif" value="Asignar" partialSubmit="true" actionListener="#{PermisoFacadeManaged.action_cb_asignarPermiso}"/>
+                                                </ice:panelGrid>
+                                                <ice:panelGrid id="pgrd_asignados" columns="1">
+                                                    <ice:panelGrid id="pgrd_seleccion" columns="2">
+                                                        <ice:outputText id="ot_seleccion" value="#{PermisoFacadeManaged.etqAsignando}" />
+                                                        <ice:selectOneMenu id="som_seleccion" partialSubmit="true" valueChangeListener="#{PermisoFacadeManaged.valueChange_som_seleccionarItem}">
+                                                            <f:selectItems id="sits_itemes" value="#{PermisoFacadeManaged.itemes}" />
+                                                        </ice:selectOneMenu>
+                                                    </ice:panelGrid>
+                                                    <p align="center">
+                                                        <ice:outputText value="Permisos asignados" />
+                                                        <ice:selectOneListbox id="sol_asignado" size="8" partialSubmit="true" style="width: 100%;" valueChangeListener="#{PermisoFacadeManaged.valueChange_sol_seleccionarPermisoAsignado}" >
+                                                            <f:selectItems id="sits_permisosA" value="#{PermisoFacadeManaged.itemesAsignados}" />
+                                                        </ice:selectOneListbox>
+                                                    </p>
+                                                </ice:panelGrid>
+                                            </ice:panelGrid>
+                                        </ice:form>
+                                    </td></tr></table>
+                                    <ice:form id="frm_paneles">
+                                        <ice:panelPopup id="ppop_errores"
+                                                        draggable="false" modal="true"
+                                                        visible="#{PermisoFacadeManaged.errorVisible}"
+                                                        styleClass="corePopup">
+                                            <f:facet name="header">
+                                                <ice:panelGroup styleClass="popupHeaderWrapper">
+                                                    <ice:outputText
+                                                        value="Error"
+                                                        styleClass="popupHeaderText"/>
+                                                </ice:panelGroup>
+                                            </f:facet>
+                                            <f:facet name="body">
+                                                <ice:panelGroup styleClass="popupBody">
+                                                    <ice:outputText value="#{PermisoFacadeManaged.mensajeError}"/><br/>
+                                            <p align="center">
+                                                <ice:commandButton id="modalPnlCloseButton" type="submit"
+                                                                   value="Cerrar" actionListener="#{PermisoFacadeManaged.action_cb_cerrarPopup}" /></p>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                </ice:panelPopup>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer" effect="#{PermisoFacadeManaged.efecto}">
+                                <ice:outputText id="south" value="#{PermisoFacadeManaged.infoFooter}"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

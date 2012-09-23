@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Original: Alfonso Aguilar Sánchez
+    Revisado por: Jeremy Guzmán Salazar
+
+    Creado:
+        05  enero   2010.
+
+    Revisiones:
+        02  febrero 2010.
+        03  febrero 2010.
+
+    Lista de requerimientos:
+        * Funcionales: En proceso
+        * No funcionales: En Proceso
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Implementación de Beans.
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>Administración de Presupuestos</title>
+            </head>
+            <body>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGrid columns="4" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" style="logoUNA" alt="Logotipo UNA"/>
+                                <img src="../resources/images/pgc2.png" style="logoPGC" alt="Lootipo PGC" />
+                                <ice:outputText id="slider" value="SLIDER" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <!-- Correspondecia Interna menu -->
+                                            <ice:menuItem value="Interna"
+                                                          id="file" onclick="return false;">
+                                                <ice:menuItem action=""
+                                                              id="ingEnvios"
+                                                              value="Ingresar Envíos">
+                                                    <f:param name="myParam"
+                                                             value="Ingresar"/>
+                                                </ice:menuItem>
+                                            </ice:menuItem>
+
+                                            <!-- Correspondencia Externa menu -->
+                                            <ice:menuItem value="Externa"
+                                                          id="edit" onclick="return false;">
+                                                <ice:menuItem id="facturas"
+                                                              value="Facturas"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="notas"
+                                                              value="Notas"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="envios"
+                                                              value="Envíos"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="presupuesto"
+                                                              value="Presupuesto"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="consulta"
+                                                              value="Consulta"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                            </ice:menuItem>
+
+                                            <!-- View menu -->
+                                            <ice:menuItem value="Salir" id="salir" onclick="return false;">
+                                            </ice:menuItem>
+
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td>
+                            <ice:form id="frm_principal">
+                                <ice:panelGroup styleClass="contenido">
+                                    <ice:panelGroup styleClass="sysnopsisBox panelCollapsible">
+                                        <ice:outputText value="Sinopsis de la pantalla"/>
+                                        <ice:outputText value="Descripcion de la accion"/>
+                                    </ice:panelGroup>                                    
+                                    <ice:panelGroup id="pgrp_panelPresupuesto">
+                                        <ice:panelCollapsible id="pclp_panelPresupuestoUNA" expanded="true" >
+                                            <f:facet name="header">
+                                                    <ice:outputText id="linkHeader" value="Presupuesto UNA" />
+                                            </f:facet>
+                                            <ice:panelGrid columns="2">
+                                                <ice:panelGrid columns="2">
+                                                    <!-- Fecha -->
+                                                    <ice:outputText id="ot_fechaF" value="Fecha:" />
+                                                    <ice:selectInputDate id="sid_fechaF" renderAsPopup="true">
+                                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                    </ice:selectInputDate>
+                                                    <!-- Numero de cheque-->
+                                                    <ice:outputText id="ot_numeroChequeF" value="Número de Cheque:" />
+                                                    <ice:selectInputText id="sit_numeroChequeF" value="PI" width="115px" />
+                                                    <!-- Numero de Deposito-->
+                                                    <ice:outputText id="ot_numeroDepositoF" value="Número de depósito:" />
+                                                    <ice:selectInputText id="sit_numeroDepositoF" value="PI" width="115px" />
+                                                    <!-- Monto -->
+                                                    <ice:outputText id="ot_importeF" value="Importe:" />
+                                                    <ice:selectInputText id="sit_importeF" value="PI" width="115px" />
+                                                    <!-- Botones  OK Cancel -->
+                                                    <ice:commandButton   id="cb_AnadirMonto" type="Submit" value="Añadir Monto" action="#{Page1.button1_action}"></ice:commandButton>
+                                                    <ice:commandButton id="cn_Cancelar" type="Reset" value="Cancelar" />
+                                                </ice:panelGrid>
+                                                <ice:panelGroup id="pgrp_panelTablaPresupuestoUNA">
+                                                    <ice:dataTable id="dt_tablaPresupuestoUNA"  value=""
+                                                                   var="presupustoUNA" width="100%"
+                                                                   sortColumn=""
+                                                                   sortAscending="">
+                                                        <!-- Columna Ordenar Fecha -->
+                                                        <ice:column id="dc_fecha">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="fechaHeader"
+                                                                                       columnName="fecha" >
+                                                                    <ice:outputText id="ot_fechaT" value="Fecha"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_fecha" value="PI" />
+                                                        </ice:column>
+                                                        <!-- Columna Ordenar Numero de Cheque -->
+                                                        <ice:column id="dc_numeroCheque">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="numeroChequeHeader"
+                                                                                       columnName="numeroCheque" >
+                                                                    <ice:outputText id="ot_numeroChequeT" value="Número de Depósito"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_numeroCheque" value="PI" />
+                                                        </ice:column>
+                                                        <!-- Columna Normal Numero de deposito  -->
+                                                        <ice:column id="dc_numeroDeposito">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_numeroDepositoT" value="Número de Depósito"/>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_numeroDeposito" value="PI" />
+                                                        </ice:column>
+                                                        <!-- Columna Normal Monto  -->
+                                                        <ice:column id="dc_importe">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_importeT" value="Importe"/>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_importe" value="PI" />
+                                                        </ice:column>
+                                                    </ice:dataTable>
+                                                </ice:panelGroup>
+                                            </ice:panelGrid>
+                                        </ice:panelCollapsible>
+                                    </ice:panelGroup>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer">
+                                <ice:outputText id="south" value="Bara de estado"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Original: Jeremy Guzmán Salazar
+    Revisado por:
+
+    Creado:
+        11  febrero 2010.
+
+    Revisiones:
+
+    Lista de requerimientos:
+        * Funcionales: En proceso
+        * No funcionales: En Proceso
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Implementar Beans
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>Administración de las Unidades</title>
+            </head>
+            <body>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGrid columns="4" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" style="logoUNA" />
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" style="logoPGC" />
+                                <ice:outputText id="slider" value="SLIDER"></ice:outputText>
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <!-- Correspondecia Interna menu -->
+                                            <ice:menuItem value="Interna"
+                                                          id="file" onclick="return false;">
+                                                <ice:menuItem action=""
+                                                              id="ingEnvios"
+                                                              value="Ingresar Envíos">
+                                                    <f:param name="myParam"
+                                                             value="Ingresar"/>
+                                                </ice:menuItem>
+                                            </ice:menuItem>
+
+                                            <!-- Correspondencia Externa menu -->
+                                            <ice:menuItem value="Externa"
+                                                          id="edit" onclick="return false;">
+                                                <ice:menuItem id="facturas"
+                                                              value="Facturas"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="notas"
+                                                              value="Notas"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="envios"
+                                                              value="Envíos"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="presupuesto"
+                                                              value="Presupuesto"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="consulta"
+                                                              value="Consulta"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                            </ice:menuItem>
+
+                                            <!-- View menu -->
+                                            <ice:menuItem value="Salir" id="salir" onclick="return false;">
+                                            </ice:menuItem>
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td>
+                            <ice:form id="frm_principal">
+                                <ice:panelGrid id="pgrd_principal" columns="2">
+                                    <ice:tree id="tr_unidades" value="#{AdministracionUnidad.modelo}" var="node"
+                                              hideRootNode="false" hideNavigation="false">
+                                        <ice:treeNode>
+                                            <f:facet name="icon">
+                                                <ice:panelGroup
+                                                    style="display: inline" >
+                                                    <ice:graphicImage
+                                                        value="../resources/rime/css-images/arrow-first-dis.gif"/>
+                                                </ice:panelGroup>
+                                            </f:facet>
+                                            <f:facet name="content">
+                                                <ice:commandLink id="cl_treeNode">
+                                                    <ice:outputText id="ot_treeNode" value="#{node.userObject.text}" styleClass="treeSelectedNode" />
+                                                </ice:commandLink>
+                                            </f:facet>
+                                        </ice:treeNode>
+                                    </ice:tree>
+                                </ice:panelGrid>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer">
+                                <ice:outputText id="south" value="Barra de estado"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

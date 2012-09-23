@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Original: Alfonso Aguilar Sánchez
+    Revisado por: Jeremy Guzmán Salazar
+
+    Creado:
+        5   enero   2010.
+
+    Revisiones:
+        31  enero   2010.
+        01  febrero 2010.
+
+    Lista de requerimientos:
+        * Funcionales: En proceso
+        * No funcionales: En Proceso
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Implementación de Beans.
+
+-->
+
+<jsp:root version="2.0" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ice="http://www.icesoft.com/icefaces/component" xmlns:jsp="http://java.sun.com/JSP/Page">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>Notas Crédito/Débito</title>
+            </head>
+            <body>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGrid columns="4" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" style="logoUNA" alt="Logotipo UNA"/>
+                                <img src="../resources/images/pgc2.png" style="logoPGC" alt="Logotipo PGC" />
+                                <ice:outputText id="slider" value="SLIDER" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <!-- Correspondecia Interna menu -->
+                                            <ice:menuItem value="Interna"
+                                                          id="file" onclick="return false;">
+                                                <ice:menuItem action=""
+                                                              id="ingEnvios"
+                                                              value="Ingresar Envíos">
+                                                    <f:param name="myParam"
+                                                             value="Ingresar"/>
+                                                </ice:menuItem>
+                                            </ice:menuItem>
+
+                                            <!-- Correspondencia Externa menu -->
+                                            <ice:menuItem value="Externa"
+                                                          id="edit" onclick="return false;">
+                                                <ice:menuItem id="facturas"
+                                                              value="Facturas"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="notas"
+                                                              value="Notas"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="envios"
+                                                              value="Envíos"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="presupuesto"
+                                                              value="Presupuesto"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="consulta"
+                                                              value="Consulta"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                            </ice:menuItem>
+
+                                            <!-- View menu -->
+                                            <ice:menuItem value="Salir" id="salir" onclick="return false;" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td>
+                            <ice:form id="frm_principal">
+                                <ice:panelGroup styleClass="contenido">
+                                    <ice:panelGroup styleClass="sysnopsisBox panelCollapsible">
+                                        <ice:outputText value="Sinopsis de la pantalla"/>
+                                        <ice:outputText value="Descripcion de la accion"/>
+                                    </ice:panelGroup>
+                                    <ice:panelGroup styleClass="pnlClpsblWrapper panelCollapsible">
+                                        <ice:panelCollapsible id="pclp_notas" expanded="true">
+                                            <f:facet name="header">
+                                                <ice:panelGroup>
+                                                    <ice:outputText id="notasHeader" value="Notas Crédito" />
+                                                </ice:panelGroup>
+                                            </f:facet>
+                                            <ice:panelGrid columns="2">
+                                                <ice:panelGrid columns="2">
+                                                    <!-- Fecha -->
+                                                    <ice:outputText id="ot_fechaNota" value="Fecha de la nota." />
+                                                    <ice:selectInputDate id="sid_fechaNota" renderAsPopup="true" >
+                                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                    </ice:selectInputDate>
+                                                    <!-- Numero de Factura -->
+                                                    <ice:outputLabel for="ot_numeroFacturaF" value="Número de facturas:"></ice:outputLabel>
+                                                    <ice:selectInputText id="sit_numeroFacturaF" value="PI" width="115" />
+                                                    <!-- Envio -->
+                                                    <ice:outputText id="ot_tipoF" value="Tipo de Nota" />
+                                                    <ice:selectInputText id="sit_tipoF" value="PI" width="115" />
+                                                    <!-- N�mero Nota -->
+                                                    <ice:outputText id="ot_numeroNotaF" value="Numero de Nota:" />
+                                                    <ice:selectInputText id="sit_numeroNotaF" value="PI" width="115" />
+                                                    <!-- Importe -->
+                                                    <ice:outputText id="ot_importeNotaF" value="Importe" />
+                                                    <ice:selectInputText id="sit_importeNotaF" value="PI" width="115" />
+                                                    <!-- Botones  OK Cancel -->
+                                                    <ice:commandButton id="btnNotasAceptar" type="Submit" value="Ingresar"></ice:commandButton>
+                                                    <ice:commandButton id="btnNotasCancelar" type="Reset" value="Cancelar"></ice:commandButton>
+                                                </ice:panelGrid>
+                                                <ice:panelGroup id="panelTablaNotas">
+                                                    <ice:dataTable id="tablaNotas"  value=""
+                                                                   var="facturas" width="100%"
+                                                                   sortColumn=""
+                                                                   sortAscending="">
+                                                        <!-- Columna Ordenar Fecha -->
+                                                        <ice:column id="dc_fecha">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="fechaHeaderNota"
+                                                                                       columnName="fecha" >
+                                                                    <ice:outputText id="ot_fechaNotaT" value="Fecha"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_fechaNota" value="PI"/>
+                                                        </ice:column>
+                                                        <!-- Columna Ordenar Numero Factura -->
+                                                        <ice:column id="dc_facturaNota">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="facturaHeaderNota" columnName="factura" >
+                                                                    <ice:outputText id="ot_facturaNotaT" value="Número de Factura"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_facturaNota" value="PI" />
+                                                        </ice:column>
+                                                        <!-- Columna Ordenar Tipo -->
+                                                        <ice:column id="dc_tipo">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="tipoHeaderNota" columnName="tipo" >
+                                                                    <ice:outputText id="ot_tipoNotaT" value="Tipo de Nota"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_tipoNota" value="PI" />
+                                                        </ice:column>
+                                                        <!-- Columna Ordenar Numero Nota -->
+                                                        <ice:column id="dc_numeroNota">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="numeroHeaderNota"
+                                                                                       columnName="numero" >
+                                                                    <ice:outputText id="ot_numeroNotaT" value="Número de Nota"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_numeroNota" value="PI"/>
+                                                        </ice:column>
+                                                        <!-- Columna Ordenar Importe -->
+                                                        <ice:column id="dc_importe">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="importeHeaderNota"
+                                                                                       columnName="importeNota" >
+                                                                    <ice:outputText id="ot_importeT" value="Importe"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="importeNota" value="PI" />
+                                                        </ice:column>
+                                                    </ice:dataTable>
+                                                </ice:panelGroup>
+                                            </ice:panelGrid>
+                                        </ice:panelCollapsible>
+                                    </ice:panelGroup>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer">
+                                <ice:outputText id="south" value="Bara de estado"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

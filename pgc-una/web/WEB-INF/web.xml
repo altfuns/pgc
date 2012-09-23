@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+    <context-param>
+        <param-name>com.icesoft.faces.concurrentDOMViews</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.icesoft.faces.debugDOMUpdate</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.sun.faces.validateXml</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.sun.faces.verifyObjects</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.icesoft.faces.uploadMaxFileSize</param-name>
+        <param-value>4048576</param-value>
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
+    </context-param>
+    <context-param>
+        <param-name>com.icesoft.faces.synchronousUpdate</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <description>URL de la base de datos. Usado en los reportes.</description>
+        <param-name>DB_URL</param-name>
+        <param-value>jdbc:postgresql://localhost:5432/pgcdb</param-value>
+    </context-param>
+    <context-param>
+        <description>Usuario de la base de datos.</description>
+        <param-name>DB_usuario</param-name>
+        <param-value>postgres</param-value>
+    </context-param>
+    <context-param>
+        <description>El url donde se encuetra el servidor el LDAP de autentificación</description>
+        <param-name>LDAP_URL</param-name>
+        <param-value>ldap://10.0.2.53:389</param-value>
+    </context-param>
+    <context-param>
+        <description>Nombre del campo por el cual se va autenficar el usuario</description>
+        <param-name>LDAP_ID</param-name>
+        <param-value>uid</param-value>
+    </context-param>
+    <context-param>
+        <description>Metodo que utiliza ldap para autenticar usuarios</description>
+        <param-name>LDAP_AUTHENTICATION</param-name>
+        <param-value>simple</param-value>
+    </context-param>
+    <context-param>
+        <description>Parámetros utilizados por el sercidor LDAP</description>
+        <param-name>LDAP_PRINCIPAL</param-name>
+        <param-value>ou=People,dc=una,dc=ac,dc=cr</param-value>
+    </context-param>
+    <context-param>
+        <description>Password de la base de datos.</description>
+        <param-name>DB_password</param-name>
+        <param-value>postgres</param-value>
+    </context-param>
+    <context-param>
+        <param-name>direccionGuardar</param-name>
+        <param-value>1./opt/glassfish/domains/domain1/tmp/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>direccionReportes</param-name>
+        <param-value>1./opt/glassfish/domains/domain1/Reportes/</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>Persistent Faces Servlet</servlet-name>
+        <servlet-class>com.icesoft.faces.webapp.xmlhttp.PersistentFacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>Blocking Servlet</servlet-name>
+        <servlet-class>com.icesoft.faces.webapp.xmlhttp.BlockingServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>uploadServlet</servlet-name>
+        <servlet-class>com.icesoft.faces.component.inputfile.FileUploadServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Persistent Faces Servlet</servlet-name>
+        <url-pattern>/xmlhttp/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Persistent Faces Servlet</servlet-name>
+        <url-pattern>*.iface</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Persistent Faces Servlet</servlet-name>
+        <url-pattern>*.jspx</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Blocking Servlet</servlet-name>
+        <url-pattern>/block/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>uploadServlet</servlet-name>
+        <url-pattern>/uploadHtml</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <url-pattern>/faces/*</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>
+            30
+        </session-timeout>
+    </session-config>
+    <welcome-file-list>
+        <welcome-file>welcomeICEfaces.iface</welcome-file>
+        </welcome-file-list>
+    <ejb-ref>
+        <ejb-ref-name>CorrespondenciaExternaFacade</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <remote>cr.ac.una.cgi.pgc.session.CorrespondenciaExternaFacadeRemote</remote>
+    </ejb-ref>
+    <ejb-ref>
+        <ejb-ref-name>CorrespondenciaExternaFacade1</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <remote>cr.ac.una.cgi.pgc.session.CorrespondenciaExternaFacadeRemote</remote>
+    </ejb-ref>
+    </web-app>

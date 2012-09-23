@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+Lista de requerimientos:
+        * Funcionales:
+            * Agregar paises
+            * Eliminar paises
+
+        * No funcionales:
+            * 
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Implementar Beans
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>UNA | Oficina Postal | Administración de Países</title>
+            </head>
+            <body>
+                <table width="100%" style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="100%" valign="top" style="height:100%">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Administración | Administración de Grupos de Envío" />
+                            </p>
+                            <ice:form id="frm_principal" style="width: 100%;">
+                                <ice:panelGrid id="pgrd_principal" columns="2" cellspacing="15" style="width: 100%;">
+                                    <ice:panelCollapsible id="pclp_formulario" expanded="true" style="vertical-align:top;">
+                                        <f:facet name="header">
+                                            <ice:outputText id="ot_tituloFormulario" value="Consulta de Paises por Grupo" />
+                                        </f:facet>
+                                        <ice:panelGrid id="pgrd_grupos" columns="2" width="100%">
+                                            <ice:panelGroup id="pgrp_grupos">
+                                                <ice:outputText id="ot_tituloG" value="Grupos de Envío:" />
+                                                <br /><br />
+                                                <ice:selectOneRadio layout="pageDirection" id="sor_grupos" partialSubmit="true" value="#{PaisFacadeManaged.auxPais.grupoSeleccionado}">
+                                                    <f:selectItem id="sit_grupos1" itemValue="G1"  itemLabel="Grupo I"/>
+                                                    <f:selectItem id="sit_grupos2" itemValue="G2"  itemLabel="Grupo II"/>
+                                                    <f:selectItem id="sit_grupos3" itemValue="G3"  itemLabel="Grupo III"/>
+                                                    <f:selectItem id="sit_grupos4" itemValue="G4"  itemLabel="Grupo IV"/>
+                                                </ice:selectOneRadio>
+                                                <br />
+                                            </ice:panelGroup>
+                                            <ice:panelGroup id="pgrp_Paises">
+                                                <ice:outputText id="ot_tituloC" value="Países registrados en este grupo:" />
+                                                <p align="center">
+                                                    <ice:selectOneListbox id="sol_consultaPais" partialSubmit="true" valueChangeListener="#{PaisFacadeManaged.valueChange_sol_seleccionarPais}">
+                                                        <f:selectItems id="sits_consultaPais" value="#{PaisFacadeManaged.paisesConsultados}" />
+                                                    </ice:selectOneListbox>
+                                                </p>
+                                                <ice:panelConfirmation id="pcrf_eliminar" acceptLabel="Si" cancelLabel="No" message="¿Desea eliminar #{PaisFacadeManaged.paisSeleccionado}?"
+                                                                       autoCentre="true" title="¡Atención!" />
+                                                <p align="center">
+                                                    <ice:commandButton id="cb_eliminarPais" panelConfirmation="pcrf_eliminar" value="Eliminar" actionListener="#{PaisFacadeManaged.action_cb_eliminarPais}"/>
+                                                </p>
+                                            </ice:panelGroup>
+                                        </ice:panelGrid>
+                                    </ice:panelCollapsible>
+                                    <ice:panelGrid id="pgrd_formulario" columns="2" cellspacing="5">
+                                        <ice:outputText id="ot_pais" value="Ingrese el nuevo país:" />
+                                        <ice:inputText id="sit_pais" partialSubmit="true" value="#{PaisFacadeManaged.auxPais.nuevoPais}" />
+                                        <ice:panelConfirmation id="pcrf_agregar" acceptLabel="Si" cancelLabel="No" message="¿Desea agregar #{PaisFacadeManaged.auxPais.nuevoPais} al grupo #{PaisFacadeManaged.auxPais.grupoSeleccionado}?"
+                                                               autoCentre="true" title="¡Atención!" />
+                                        <ice:commandButton id="cb_agregarPais" value="Agregar País" panelConfirmation="pcrf_agregar" actionListener="#{PaisFacadeManaged.action_cb_guardarPais}"/>
+                                    </ice:panelGrid>
+                                </ice:panelGrid>
+                            </ice:form>
+                            <ice:form id="frm_paneles">
+                                <ice:panelPopup id="ppop_errores"
+                                                draggable="false" modal="true"
+                                                visible="#{PaisFacadeManaged.errorVisible}"
+                                                styleClass="corePopup">
+                                    <f:facet name="header">
+                                        <ice:panelGroup styleClass="popupHeaderWrapper">
+                                            <ice:outputText
+                                                value="Error"
+                                                styleClass="popupHeaderText"/>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                    <f:facet name="body">
+                                        <ice:panelGroup styleClass="popupBody">
+                                            <ice:outputText value="#{PaisFacadeManaged.mensajeError}"/><br/>
+                                            <p align="center">
+                                                <ice:commandButton id="modalPnlCloseButton" type="submit"
+                                                                   value="Cerrar" actionListener="#{PaisFacadeManaged.action_cb_cerrarPopup}" /></p>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                </ice:panelPopup>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer" effect="#{PaisFacadeManaged.efecto}">
+                                <ice:outputText id="south" value="#{PaisFacadeManaged.infoFooter}"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

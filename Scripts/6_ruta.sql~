@@ -1,0 +1,8 @@
+﻿DELETE FROM RUTA;
+
+INSERT INTO ruta (numero, fecha, empleado_id, interna) VALUES ('1', '2010-05-22', '401360836', TRUE);
+INSERT INTO ruta (numero, fecha, empleado_id, interna) VALUES ('2', '2010-05-22', '108370252', TRUE);
+INSERT INTO ruta (numero, fecha, empleado_id, interna) VALUES ('3', '2010-05-22', '401150476', TRUE);
+INSERT INTO ruta (numero, fecha, empleado_id, interna) VALUES ('4', '2010-05-22', '401820054', TRUE);
+INSERT INTO ruta (numero, fecha, empleado_id, interna) VALUES ('5', '2010-05-22', '107890623', TRUE);
+INSERT INTO ruta (numero, fecha, empleado_id, interna) VALUES ('6', '2010-05-22', '106590931', FALSE);

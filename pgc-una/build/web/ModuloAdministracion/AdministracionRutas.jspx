@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : pgc-una
+    Created on : 23/01/2010, 03:31:17 PM
+    Author     : red
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>UNA | Oficina Postal | Administración de Rutas</title>
+            </head>
+            <body>
+                <table>
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="100%" valign="top">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Administración | Administración de Rutas" />
+                            </p>
+                            <table width="100%" cellspacing="30" >
+                                <tr>
+                                    <td width="25%" valign="top">
+                                        <ice:form id="frm_arbol">
+                                            <ice:panelGroup id="pgrp_arbol">
+
+                                                <ice:outputText id="ot_tituloRutas" value="Asignación de rutas:" />
+                                                <br /><br />
+                                                <ice:tree id="tr_internas" value="#{RutaFacadeManaged.model}" var="node"
+                                                          hideRootNode="false" hideNavigation="true" style="vertical-align: top;" >
+                                                    <ice:treeNode>                                                        
+                                                        <f:facet name="content">
+                                                            <ice:commandLink id="cl_treeNode" partialSubmit="true" actionListener="#{RutaFacadeManaged.action_cl_seleccionarItemInterna}">
+                                                                <ice:outputText id="ot_treeNode" value="#{node.userObject.text}" styleClass="treeSelectedNode" />
+                                                            </ice:commandLink>
+                                                        </f:facet>
+                                                    </ice:treeNode>
+                                                </ice:tree>
+                                                <br />
+                                                <ice:tree id="tr_externas" value="#{RutaFacadeManaged.modelExternas}" var="node"
+                                                          hideRootNode="false" hideNavigation="true" style="vertical-align: top;" >
+                                                    <ice:treeNode>
+                                                        <f:facet name="content">
+                                                            <ice:commandLink id="cl_treeNode" partialSubmit="true" actionListener="#{RutaFacadeManaged.action_cl_seleccionarItemExterna}">
+                                                                <ice:outputText id="ot_treeNode" value="#{node.userObject.text}" styleClass="treeSelectedNode" />
+                                                            </ice:commandLink>
+                                                        </f:facet>
+                                                    </ice:treeNode>
+                                                </ice:tree>
+                                            </ice:panelGroup>
+                                        </ice:form>
+                                    </td><td width="25%" valign="top">
+                                        <ice:form id="frm_agregarRutas">
+                                            <ice:panelCollapsible id="pclp_agregarRutas" style="vertical-align:top; width: 100%;" expanded="true">
+                                                <f:facet name="header">
+                                                    <ice:outputText id="ot_tituloAgregarRutas" value="Administración de Rutas" />
+                                                </f:facet>
+                                                <ice:panelGrid id="pgrd_infoRuta" columns="2" styleClass="popupBody" style="vertical-align: top;" width="100%" >
+                                                    <f:facet name="header">
+                                                        <ice:outputText id="ot_tituloConsultaRuta" value="Ruta Seleccionada" />
+                                                    </f:facet>
+                                                    <ice:outputText id="ot_numeroE" value="Nombre de la Ruta: " />
+                                                    <ice:outputText id="ot_numeroC" value="#{RutaFacadeManaged.auxRuta.rutaSel.numero}" />
+                                                    <ice:outputText id="ot_mensajeroE" value="Mensajero Asignado: " />
+                                                    <ice:outputText id="ot_mensajeroC" value="#{RutaFacadeManaged.auxRuta.rutaSel.empleadoId.nombre} #{RutaFacadeManaged.auxRuta.rutaSel.empleadoId.middleName} #{RutaFacadeManaged.auxRuta.rutaSel.empleadoId.apellidos}" />
+                                                </ice:panelGrid>
+                                                <br />
+                                                <p align="center"><ice:commandButton id="cb_abrirAsignacion" value="Asignar mensajero" actionListener="#{RutaFacadeManaged.action_cb_abrirAsignacionMensajeros}"/></p>
+                                                <br /><ice:menuItemSeparator id="mis_separator1" /><br />
+                                                <ice:panelGrid id="pgrd_adminRuta" columns="2">
+                                                    <ice:outputText id="ot_ingresoR" value="Ingrese el nombre de la nueva ruta: " />
+                                                    <ice:inputText id="it_ingresoR" partialSubmit="true" value="#{RutaFacadeManaged.auxRuta.nuevaRuta}" maxlength="10" />
+                                                    <ice:outputText id="ot_ingresoRTipo" value="Tipo de Ruta: " />
+                                                    <ice:selectOneMenu id="som_ingresoRTipo" partialSubmit="true" value="#{RutaFacadeManaged.auxRuta.nuevaRutaTipo}">
+                                                        <f:selectItem id="sit_interna" itemLabel="Interna" itemValue="interna" />
+                                                        <f:selectItem id="sit_externa" itemLabel="Externa" itemValue="externa" />
+                                                    </ice:selectOneMenu>
+
+                                                    <br /><br />
+                                                    <ice:panelConfirmation id="pcrf_agregarRuta" autoCentre="true" acceptLabel="Si" cancelLabel="No"
+                                                                           message="¿Desea agregar la ruta #{RutaFacadeManaged.auxRuta.nuevaRuta}?" title="¡Atención!" />
+                                                    <ice:panelConfirmation id="pcrf_eliminarRuta" autoCentre="true" acceptLabel="Si" cancelLabel="No"
+                                                                           message="¿Desea eliminar la ruta #{RutaFacadeManaged.rutaSel}?" title="¡Atención!" />
+                                                    <ice:commandButton id="cb_agregar" panelConfirmation="pcrf_agregarRuta" partialSubmit="true" value="Agregar Ruta" actionListener="#{RutaFacadeManaged.action_cb_guardarRuta}" />
+                                                    <ice:commandButton id="cb_eliminar" panelConfirmation="pcrf_eliminarRuta" partialSubmit="true" value="Eliminar Ruta" actionListener="#{RutaFacadeManaged.action_cb_eliminarRuta}" />
+                                                </ice:panelGrid>
+                                            </ice:panelCollapsible>
+                                        </ice:form>
+                                    </td><td width="25%" valign="top">
+                                        <ice:form id="frm_asignarUnidad">                                            
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_tituloAsignarUnidades" value="Asignar Unidades" />
+                                            </f:facet>
+                                            <ice:panelGrid id="pgrd_unidadSel" columns="2">
+                                                <f:facet name="header">
+                                                    <ice:outputText id="ot_tituloUnidadSel" value="Unidad Seleccionada" />
+                                                </f:facet>
+                                                <ice:outputText id="ot_unidadCodigoE" value="Código: " />
+                                                <ice:outputText id="ot_unidadCodigoC" value="#{RutaFacadeManaged.auxRuta.unidadSel.codigo}" />
+                                                <ice:outputText id="ot_unidadNombreE" value="Nombre: " />
+                                                <ice:outputText id="ot_unidadNombreC" value="#{RutaFacadeManaged.auxRuta.unidadSel.nombre}" />
+                                            </ice:panelGrid>
+                                            <br /><ice:menuItemSeparator id="mis_separator2" /><br />
+                                            <ice:outputText id="ot_asignarUnidades" value="Unidades que no han sido asignadas:" />
+                                            <br /><br />
+                                            <ice:selectOneListbox id="sol_unidades" size="6" style="width: 100%; height: 50%;" partialSubmit="true"
+                                                                  valueChangeListener="#{RutaFacadeManaged.valueChange_sol_seleccionarUnidad}" >
+                                                <f:selectItems id="sits_unidades" value="#{RutaFacadeManaged.auxRuta.unidadesNoAsignadas}" />
+                                            </ice:selectOneListbox>
+                                        </ice:form>
+                                        <ice:form id="frm_botonesAsignar">
+                                            <ice:panelGrid id="pgrd_acciones" columns="2" cellspacing="10">
+                                                <ice:panelConfirmation id="pcrf_remover" autoCentre="true" acceptLabel="Si" cancelLabel="No"
+                                                                       message="¿Desea remover la unidad #{RutaFacadeManaged.unidadSel} de la ruta #{RutaFacadeManaged.rutaSel}?" title="¡Atención!" />
+                                                <ice:panelConfirmation id="pcrf_agregar" autoCentre="true" acceptLabel="Si" cancelLabel="No"
+                                                                       message="¿Desea añadir la unidad #{RutaFacadeManaged.unidadSel} a la ruta #{RutaFacadeManaged.rutaSel}?" title="¡Atención!" />
+                                                <ice:commandButton id="cb_asignar" panelConfirmation="pcrf_agregar" value="Asignar" actionListener="#{RutaFacadeManaged.action_cb_asignarRuta}" />
+                                                <ice:commandButton id="cb_remover" panelConfirmation="pcrf_remover" value="Remover" actionListener="#{RutaFacadeManaged.action_cb_removerRuta}"/>
+                                            </ice:panelGrid>
+                                        </ice:form>
+                                    </td></tr></table>
+                                    <ice:form id="frm_paneles">
+                                        <ice:panelPopup id="ppop_errores"
+                                                        draggable="false" modal="true"
+                                                        visible="#{RutaFacadeManaged.errorVisible}"
+                                                        styleClass="corePopup">
+                                            <f:facet name="header">
+                                                <ice:panelGroup styleClass="popupHeaderWrapper">
+                                                    <ice:outputText
+                                                        value="Error"
+                                                        styleClass="popupHeaderText"/>
+                                                </ice:panelGroup>
+                                            </f:facet>
+                                            <f:facet name="body">
+                                                <ice:panelGroup styleClass="popupBody">
+                                                    <ice:outputText value="#{RutaFacadeManaged.mensajeError}"/><br/>
+                                            <p align="center">
+                                                <ice:commandButton id="modalPnlCloseButton" type="submit"
+                                                                   value="Cerrar" actionListener="#{RutaFacadeManaged.action_cb_cerrarPopup}" /></p>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                </ice:panelPopup>
+                            </ice:form>
+                            <ice:form id="frm_panelAsignar">
+                                <ice:panelPopup id="ppop_asignarMensajero" modal="true" autoCentre="true" title="Asignación de Mensajeros"
+                                                visible="#{RutaFacadeManaged.asignacionVisible}" styleClass="corePopup" >
+                                    <f:facet name="header">
+                                        <ice:panelGroup styleClass="popupHeaderWrapper">
+                                            <ice:outputText
+                                                value="Asignación de mensajeros"
+                                                styleClass="popupHeaderText"/>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                    <f:facet name="body">
+                                        <ice:panelGroup styleClass="popupBody">
+                                            <ice:outputText id="ot_instruccionAsign" value="Seleccione el nombre del mensajero que será asignado: "/>
+                                            <br />
+                                            <ice:panelGrid id="pgrd_body" columns="2">
+                                                <ice:outputText id="rutaSelT" value="Ruta seleccionada: " />
+                                                <ice:outputText id="rutaSelC" value="#{RutaFacadeManaged.auxRuta.rutaSel.numero}" />
+                                                <ice:outputText id="mensajero" value="Mensajero asignado: " />
+                                                <ice:selectOneRadio id="sit_mensajeroC" layout="pageDirection"
+                                                                    value="#{RutaFacadeManaged.auxRuta.mensajeroSel}">
+                                                    <f:selectItems id="sits_empleados" value="#{RutaFacadeManaged.itemesEmpleado}" />
+                                                </ice:selectOneRadio>
+                                                <br /><br />
+                                                <ice:commandButton id="cb_asignarMensajero" value="AsignarMensajeros" actionListener="#{RutaFacadeManaged.action_cb_asignarMensajero}" />
+                                                <ice:commandButton id="cb_cerrarPopup" value="Cancelar" actionListener="#{RutaFacadeManaged.action_cb_cerrarAsignacionMensajeros}" />
+                                            </ice:panelGrid>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                </ice:panelPopup>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer" effect="#{RutaFacadeManaged.efecto}">
+                                <ice:outputText id="south" value="#{RutaFacadeManaged.infoFooter}"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

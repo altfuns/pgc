@@ -1,0 +1,54 @@
+﻿DELETE FROM unidad;
+DELETE FROM ruta;
+DELETE FROM empleado_permisos;
+DELETE FROM rol_permisos;
+DELETE FROM permiso;
+DELETE FROM correspondencia_interna;
+DELETE FROM empleado;
+DELETE FROM pais;
+DELETE FROM tarifa;
+DELETE FROM grupo_envio;
+DELETE FROM rol;
+DELETE FROM tipo_interno;
+
+INSERT INTO ROL(codigo,descripcion) VALUES ('1','Jefe');
+INSERT INTO ROL(codigo,descripcion) VALUES ('2','Secretaria');
+INSERT INTO ROL(codigo,descripcion) VALUES ('3','Mensajero');
+
+INSERT INTO grupo_envio(codigo, nombre) VALUES ('NAC', 'Nacional');
+INSERT INTO grupo_envio(codigo, nombre) VALUES ('G1', 'Grupo I');
+INSERT INTO grupo_envio(codigo, nombre) VALUES ('G2', 'Grupo II');
+INSERT INTO grupo_envio(codigo, nombre) VALUES ('G3', 'Grupo III');
+INSERT INTO grupo_envio(codigo, nombre) VALUES ('G4', 'Grupo IV');
+
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('NACCR','Costa Rica','NAC');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G1ES','El Salvador','G1');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G1GU','Guatemala','G1');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G1BE','Belice','G1');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G1HO','Honduras','G1');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G1NI','Nicaragua','G1');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G1PA','Panamá','G1');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G2EU','Estados Unidos','G2');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G2CA','Canadá','G2');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G2ME','México','G2');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G2AR','Argentina','G2');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G2BO','Bolivia','G2');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G2CO','Colombia','G2');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G3ES','España','G3');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G3FR','Francia','G3');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G3AL','Alemania','G3');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G3FI','Finlandia','G3');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G3IT','Italia','G3');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G3EV','El Vaticano','G3');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G3GR','Grecia','G3');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G4JA','Japón','G4');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G4CH','China','G4');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G4AU','Australia','G4');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G4IN','India','G4');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G4SA','Sur África','G4');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G4EG','Egipto','G4');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G4MA','Madagascar','G4');
+INSERT INTO pais(codigo, nombre, codigo_grupo_envio) VALUES ('G4KE','Kenya','G4');
+
+INSERT INTO presupuesto(codigo, titulo, monto) VALUES ('001','Correos de Costa Rica', 0);
+INSERT INTO presupuesto(codigo, titulo, monto) VALUES ('002','Universidad Nacional', 0);

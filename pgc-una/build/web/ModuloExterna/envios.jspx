@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Original: Alfonso Aguilar Sánchez
+    Revisado por: Jeremy Guzmán Salazar
+
+    Creado:
+        5   enero   2010.
+
+    Revisiones:
+        30  enero   2010.
+        31  enero   2010.
+        01  febrero 2010.
+
+    Lista de requerimientos:
+        * Funcionales: En proceso
+        * No funcionales: En Proceso
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Revisar con el equipo.
+        * Implementación de Beans.
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>UNA | Oficina Postal | Envíos - Correos de Costa Rica</title>
+            </head>
+            <body>
+                <table width="100%" style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="3" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="50%" valign="top">
+                            
+                            <ice:form id="frm_principal" partialSubmit="true">
+                                <ice:panelGroup styleClass="contenido">
+                                    <ice:panelGroup styleClass="sysnopsisBox panelCollapsible">
+                                        
+                                    </ice:panelGroup>
+
+                                    <ice:panelGroup styleClass="clearer" />
+
+                                    <ice:panelGroup styleClass="central" >
+                                        
+                                            <f:facet name="header">
+                                                <ice:panelGroup>
+                                                    <ice:outputText id="linkHeader" value="Nuevo Envío" />
+                                                </ice:panelGroup>
+                                            </f:facet>
+                                            <ice:panelGrid columns="1" cellspacing="4" cellpadding="4" width="50%" styleClass="formulario">
+                                                <ice:panelGrid columns="2" >
+                                                    <!-- Fecha -->
+                                                    <ice:outputText id="ot_fecha" value="Fecha:" />
+                                                    <ice:panelGrid columns="1">
+                                                        <ice:selectInputDate id="sid_fecha" value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.fecha}"
+                                                                             renderAsPopup="true" required="true">
+                                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                        </ice:selectInputDate>
+                                                        <ice:message for="sid_fecha" id="ms_fecha_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+                                                    <!-- Unidad -->
+                                                    <ice:outputText id="ot_unidad" value="Unidad :" />
+                                                    <ice:panelGrid columns="2">
+                                                        <ice:selectInputText id="sit_unidad"
+                                                                             value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.unidadLocal}"
+                                                                             rows="#{CorrespondenciaExternaFacadeManaged.cantidadUnidades}"
+                                                                             valueChangeListener="#{CorrespondenciaExternaFacadeManaged.ValueChange_sit_unidadAutocompletar}"
+                                                                             listVar="unidad"
+                                                                             listValue="#{CorrespondenciaExternaFacadeManaged.posiblesUnidades}" required="true">
+                                                            <f:facet name="selectInputText">
+                                                                <ice:panelGrid columns="2"
+                                                                               columnClasses="nombreCol,codigoCol">
+                                                                    <ice:outputText id="AutoCmpNombUnidad" value="#{unidad.nombre}"/>
+                                                                    <ice:outputText id="AutoCmpCodUnidad" value="#{unidad.codigo}"/>
+                                                                </ice:panelGrid>
+                                                            </f:facet>
+                                                        </ice:selectInputText>
+                                                        <ice:message for="sit_unidad"  id="ms_unidad_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+
+
+                                                    <!-- Remitente -->
+                                                    <ice:outputText id="ot_remitente" value="Remitente" />
+                                                    <ice:inputText id="sit_remitente" partialSubmit="true"
+                                                                   value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.remitente}" />
+                                                    <!-- Destinatario -->
+                                                    <ice:outputText id="ot_destinatario" value="Destinatario:" />
+                                                    <ice:inputText id="sit_destinatario" partialSubmit="true"
+                                                                   value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.destinatario}" />
+                                                     <!-- Numero de Oficio-->
+                                                    <ice:outputText id="ot_numero" value="Número de ofico:" />
+                                                    <ice:panelGrid columns="1">
+                                                        <ice:inputText id="sit_numero" disabled="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.disable}"
+                                                                       value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.codigo}">
+                                                        <f:validateLength maximum="30" minimum="0" />
+                                                        </ice:inputText>
+                                                       <ice:message for="sit_numero"  id="ms_oficio_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+                                                    <!-- Peso -->
+                                                    <ice:outputText id="ot_peso" value="Peso (g):" />
+                                                    <ice:panelGrid columns="1">
+                                                        <ice:inputText id="it_peso" required="true" 
+                                                                       value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.peso}"
+                                                                      >
+                                                          <f:converter converterId="javax.faces.Double" />
+                                                          <f:validateDoubleRange minimum="0.1" />
+                                                        </ice:inputText>
+                                                        <ice:message for="it_peso" id="ms_peso_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+                                                    <!-- País -->
+                                                    <ice:outputText id="ot_pais" value="País:" />
+                                                    <ice:selectInputText id="sit_pais"
+                                                                         value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.codigoPais}"
+                                                                         rows="#{CorrespondenciaExternaFacadeManaged.cantidadPaises}"
+                                                                         valueChangeListener="#{CorrespondenciaExternaFacadeManaged.ValueChange_sit_paisAutocompletar}"
+                                                                         listVar="pais"
+                                                                         listValue="#{CorrespondenciaExternaFacadeManaged.posiblesPaises}" required="true">
+                                                        <f:facet name="selectInputText">
+                                                            <ice:panelGrid columns="3"
+                                                                           columnClasses="nombreCol,codigoCol,grupoCol">
+                                                                <ice:outputText id="AutoCmpCty" value="#{pais.nombre}"/>
+                                                                <ice:outputText id="AutoCmpSt" value="#{pais.codigo}"/>
+                                                                <ice:outputText id="AutoCmpZip" value="#{pais.codigoGrupoEnvio.nombre}"/>
+                                                            </ice:panelGrid>
+                                                        </f:facet>
+                                                    </ice:selectInputText>
+
+                                                    <!-- Tipo de envio -->
+                                                    <ice:outputText id="ot_tipo" value="Tipo de Correspondencia :" />
+                                                    <ice:selectInputText id="sit_tipo"
+                                                                         value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.tipoEnvio}"
+                                                                         rows="#{CorrespondenciaExternaFacadeManaged.cantidadTipos}"
+                                                                         valueChangeListener="#{CorrespondenciaExternaFacadeManaged.ValueChange_sit_tipoAutocompletar}"
+                                                                         listVar="tipo"
+                                                                         listValue="#{CorrespondenciaExternaFacadeManaged.posiblesTipos}" required="true">
+                                                        <f:facet name="selectInputText">
+                                                            <ice:panelGrid columns="2"
+                                                                           columnClasses="nombreCol,codigoCol">
+                                                                <ice:outputText id="AutoCmpNombTipo" value="#{tipo.nombre}"/>
+                                                                <ice:outputText id="AutoCmpCodTipo" value="#{tipo.codigo}"/>
+                                                            </ice:panelGrid>
+                                                        </f:facet>
+                                                    </ice:selectInputText>
+                                                    
+                                                     <!-- Cantidad -->
+                                                    <ice:outputText id="ot_cantidad" value="Cantidad de envíos:" />
+                                                    <ice:panelGrid columns="1">
+                                                        <ice:inputText id="it_cantidad" required="true" 
+                                                                       value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.cantidad}"
+                                                                       >
+                                                            <f:converter converterId="javax.faces.Integer" />
+                                                            <f:validateLongRange minimum="1" />
+                                                        </ice:inputText>
+                                                        <ice:message for="it_cantidad" id="ms_cantidad_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+
+                                                    
+
+                                                    <!-- Precio -->
+                                                    <ice:outputText id="ot_precio" value="Precio :" />
+                                                    <ice:panelGrid columns="1">
+                                                        <ice:inputText id="it_precio" required="true" disabled="false"
+                                                                   value="#{CorrespondenciaExternaFacadeManaged.precioCalculado}"  />
+                                                        <ice:message for="it_precio" id="ms_precio_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+                                                    
+                                                    <!-- Direccion -->
+                                                    <ice:outputText id="ot_direccion" value="Dirección:" />
+                                                    <ice:inputTextarea id="ita_direccion" value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.direccion}" rows="8"  />
+                                                   
+                                                    <!-- Botones  OK Cancel -->
+                                                    <ice:commandButton   id="cb_Aceptar" type="Submit" 
+                                                                         value="#{CorrespondenciaExternaFacadeManaged.correspondenciaExternaLocal.buttonLabel}"
+                                                                         action="#{CorrespondenciaExternaFacadeManaged.guardar}" />
+                                                    <ice:commandButton id="cb_Cancelar" type="Reset" value="Cancelar"
+                                                                       action="#{CorrespondenciaExternaFacadeManaged.limpiarCampos}"/>
+                                                    
+                                                </ice:panelGrid>
+                                                
+                                            </ice:panelGrid>
+                                      
+                                    </ice:panelGroup>
+                                </ice:panelGroup>
+                            </ice:form>       
+                        </td>
+                        <td width="50%" valign="top">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Correos de Costa Rica | Administración de Envíos" />
+                            </p>
+                            <ice:form id="frm_tabla" >
+                                 <ice:panelGroup styleClass="contenido">
+
+                                    <ice:panelGroup styleClass="central" >
+                                        <ice:panelGrid columns="1" cellspacing="4" cellpadding="4" width="50%" styleClass="formulario">
+                                            
+                                                <ice:panelGroup id="pgrp_panelTablaEnvios">
+                                                    <f:facet name="header">
+                                                        <ice:panelGroup>
+                                                            <ice:outputText id="linkHeader_tabla" value="Tabla Envíos" />
+                                                        </ice:panelGroup>
+                                                    </f:facet>
+                                                        <ice:dataTable id="tablaEnvios"  value="#{CorrespondenciaExternaFacadeManaged.listaEnvios}"
+                                                                       var="envio" width="100%"
+                                                                       sortColumn=""
+                                                                       sortAscending="">
+                                                            <!-- Columna Normal Numero Envio  -->
+                                                            <ice:column id="dc_numeroEnvio">
+                                                                <ice:rowSelector id="rowSelector"
+                                                                                 enhancedMultiple="false" multiple="false" immediate="true"
+                                                                                 preStyleOnSelection="false"
+                                                                                 value="#{envio.selected}" clickListener="#{CorrespondenciaExternaFacadeManaged.rowClicked}"
+                                                                                 />
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="ot_numeroEnvioT" value="Número"/>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_numeroEnvio" value="#{envio.identificador}" />
+                                                            </ice:column>
+                                                            <!-- Columna Ordenar Fecha -->
+                                                            <ice:column id="dc_fecha">
+                                                                
+                                                                <f:facet name="header">
+                                                                    <ice:commandSortHeader id="fechaHeader" columnName="fecha" >
+                                                                        <ice:outputText id="ot_fechaT" value="Fecha"/>
+                                                                    </ice:commandSortHeader>
+                                                                </f:facet>
+
+
+                                                                <ice:outputText id="ot_fecha" value="#{envio.fecha}">
+                                                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                                                </ice:outputText>
+                                                            </ice:column>
+                                                            <!-- Columna Normal Unidad  -->
+                                                            <ice:column id="dc_unidad">
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="ot_unidadT" value="Unidad"/>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_unidad" value="#{envio.unidad.acron}" />
+                                                            </ice:column>
+                                                            <!-- Columna Ordenar Numero de Oficio -->
+                                                            <ice:column id="dc_numero">
+                                                                <f:facet name="header">
+                                                                    <ice:commandSortHeader id="numeroHeader" columnName="numero" >
+                                                                        <ice:outputText id="ot_numeroT" value="Número"/>
+                                                                    </ice:commandSortHeader>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_numero" value="#{envio.codigo}" />
+                                                            </ice:column>
+                                                            <!-- Columna Normal Remitente  -->
+                                                            <ice:column id="dc_remitente">
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="ot_remitenteT" value="Remitente"/>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_remitente" value="#{envio.remitente}" />
+                                                            </ice:column>
+                                                            <!-- Columna Normal Destinatario  -->
+                                                            <ice:column id="dc_destinatario">
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="ot_destinatarioT" value="Destinatario"/>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_destinatario" value="#{envio.destinatario}" />
+                                                            </ice:column>
+                                                            <!-- Columna Normal Peso  -->
+                                                            <ice:column id="dc_peso">
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="ot_pesoT" value="Peso"/>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_peso" value="#{envio.peso}" />
+                                                            </ice:column>
+                                                            <!-- Columna Normal Pais  -->
+                                                            <ice:column>
+                                                                <f:facet name="header">
+                                                                    <ice:outputText value="País"/>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_pais" value="#{envio.pais.nombre}" />
+                                                            </ice:column>
+                                                            <!-- Columna Normal Direccion -->
+                                                            <ice:column id="dc_direccion">
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="ot_direccionT" value="Dirección" />
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_direccion" value="#{envio.direccion}" />
+                                                            </ice:column>
+                                                            <!-- Columna Normal Grupo  -->
+                                                            <ice:column id="dc_grupo">
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="ot_grupoT" value="Grupo"/>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_grupo" value="#{envio.pais.codigoGrupoEnvio.nombre}" />
+                                                            </ice:column>
+                                                            <!-- Columna Normal Tipo  -->
+                                                            <ice:column id="dc_tipo">
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="ot_tipoT" value="Tipo"/>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_tipo" value="#{envio.tipo.nombre}"/>
+                                                            </ice:column>
+                                                            <!-- Columna Normal Cantidad  -->
+                                                            <ice:column id="dc_cantidad">
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="ot_cantidadT" value="Cantidad"/>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_cantidad" value="#{envio.cantidad}" />
+                                                            </ice:column>
+                                                            <!-- Columna Normal Cantidad  -->
+                                                            <ice:column id="dc_precio">
+                                                                <f:facet name="header">
+                                                                    <ice:outputText id="ot_precioT" value="Precio"/>
+                                                                </f:facet>
+                                                                <ice:outputText id="ot_precio" value="#{envio.precio}" />
+                                                            </ice:column>
+                                                        </ice:dataTable>
+                                                    </ice:panelGroup>
+                                       
+                                        </ice:panelGrid>
+                                        
+                                    </ice:panelGroup>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <ice:panelGroup styleClass="footer">
+                                <ice:message for="frm_principal" id="barra_estado" errorClass="error" infoStyle="info" />
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

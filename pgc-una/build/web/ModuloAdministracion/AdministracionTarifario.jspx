@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Lista de requerimientos:
+        * Funcionales:
+            * Consultar tarifas por grupos y tipos de envío.
+            * Actualizar las tarifas
+
+        * No funcionales:
+
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Implementar las etiquetas de error.
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>UNA | Oficina Postal | Administración del Tarifario e Correos de Costa Rica</title>
+            </head>
+            <body>
+                <table width="100%" style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="100%" valign="top" style="height:100%">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Administración | Administración del Tarifario" />
+                            </p>
+                            <ice:form id="frm_principal">
+                                <ice:panelGrid id="pgrd_principal" columns="2" width="100%" style="vertical-align: top;">
+                                    <ice:panelGrid id="pgrd_consulta" columns="2" style="vertical-align: top;">
+                                        <f:facet name="header">
+                                            <ice:outputText id="ot_tituloTarifario" value="Seleccione el grupo y el tipo de envío para mostrar sus tarifas." />
+                                        </f:facet>                                        
+                                        <ice:outputText id="ot_grupo" value="Grupo de Envío: " />
+                                        <ice:selectOneListbox id="sol_grupo" value="#{TarifaFacadeManaged.auxTarifa.grupoSeleccionado}" partialSubmit="true" >
+                                            <f:selectItem id="sit_grupo0" itemLabel="Nacional" itemValue="NAC" />
+                                            <f:selectItem id="sit_grupo1" itemLabel="Grupo I" itemValue="G1" />
+                                            <f:selectItem id="sit_grupo2" itemLabel="Grupo II" itemValue="G2" />
+                                            <f:selectItem id="sit_grupo3" itemLabel="Grupo III" itemValue="G3" />
+                                            <f:selectItem id="sit_grupo4" itemLabel="Grupo IV" itemValue="G4" />
+                                        </ice:selectOneListbox>
+                                        <ice:outputText id="ot_prioridad" value="Tipo de Envío: " />
+                                        <ice:selectOneListbox id="sol_prioridad" value="#{TarifaFacadeManaged.auxTarifa.tipoEnvio}" partialSubmit="true" >
+                                            <f:selectItem id="sit_prioridad1" itemLabel="Ordinarios" itemValue="1" itemDisabled="#{TarifaFacadeManaged.auxTarifa.ordinariosVisible}"/>
+                                            <f:selectItem id="sit_prioridad2" itemLabel="Encomienda Nacional" itemValue="2" itemDisabled="#{TarifaFacadeManaged.auxTarifa.encomiendaNacVisible}" />
+                                            <f:selectItem id="sit_prioridad3" itemLabel="Curier Nacional" itemValue="3" itemDisabled="#{TarifaFacadeManaged.auxTarifa.curierNacVisible}" />
+                                            <f:selectItem id="sit_prioridad4" itemLabel="No prioritarios" itemValue="4" itemDisabled="#{TarifaFacadeManaged.auxTarifa.noPrioritariosVisible}"/>
+                                            <f:selectItem id="sit_prioridad5" itemLabel="Prioritarios" itemValue="5" itemDisabled="#{TarifaFacadeManaged.auxTarifa.prioritariosVisible}"/>
+                                            <f:selectItem id="sit_prioridad6" itemLabel="Certificados" itemValue="6" />
+                                            <f:selectItem id="sit_prioridad7" itemLabel="Tarjetas Postales Internacionales" itemValue="7" itemDisabled="#{TarifaFacadeManaged.auxTarifa.tarjetasVisible}"/>
+                                        </ice:selectOneListbox>
+                                    </ice:panelGrid>                                    
+                                    <ice:dataTable id="dt_tarifario" sortColumn="dc_peso" sortAscending="true" value="#{TarifaFacadeManaged.consultados}" var="tarifa" rows="#{TarifaFacadeManaged.auxTarifa.cantidadTarifas}" width="100%" style="vertical-align: top;">
+                                        <f:facet name="header">
+                                            <ice:outputText id="ot_tituloTarifario" value="Tarifario de Correos de Costa Rica" />
+                                        </f:facet>
+                                        <ice:column id="dc_peso" >
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_pesoT" value="Peso (g)" />
+                                            </f:facet>
+                                            <ice:outputText id="ot_pesoC" value="#{tarifa.pesoInicio} - #{tarifa.pesoFinal}" />
+                                        </ice:column>
+                                        <ice:column id="dc_precio" >
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_precioT" value="Tarifa" />
+                                            </f:facet>
+                                            <ice:inputText id="it_precioC" partialSubmit="true" value="#{tarifa.precio}" maxlength="10"/>
+                                            <ice:message for="it_precioC" id="ms_double_error" errorClass="error" infoClass="info" />
+                                        </ice:column>
+                                    </ice:dataTable>                                    
+                                </ice:panelGrid>
+                                <ice:panelConfirmation id="pcfr_realizarCambios" acceptLabel="Si" cancelLabel="No"
+                                                       autoCentre="true" message="¿Desea guardar los cambios hechos?" title="¡Atención!" />
+                                <p align="center"><ice:commandButton id="cb_guardarCambios" panelConfirmation="pcfr_realizarCambios" value="Guardar Cambios" actionListener="#{TarifaFacadeManaged.action_cb_guardarCambios}" /></p>
+                            </ice:form>
+                            <ice:form id="frm_paneles">
+                                <ice:panelPopup id="ppop_errores"
+                                                draggable="false" modal="true"
+                                                visible="#{TarifaFacadeManaged.errorVisible}"
+                                                styleClass="corePopup">
+                                    <f:facet name="header">
+                                        <ice:panelGroup styleClass="popupHeaderWrapper">
+                                            <ice:outputText
+                                                value="Error"
+                                                styleClass="popupHeaderText"/>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                    <f:facet name="body">
+                                        <ice:panelGroup styleClass="popupBody">
+                                            <ice:outputText value="#{TarifaFacadeManaged.mensajeError}"/><br/>
+                                            <p align="center">
+                                                <ice:commandButton id="modalPnlCloseButton" type="submit"
+                                                                   value="Cerrar" actionListener="#{TarifaFacadeManaged.action_cb_cerrarPopup}" /></p>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                </ice:panelPopup>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer">
+                                <ice:outputText id="south" value="Barra de estado"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

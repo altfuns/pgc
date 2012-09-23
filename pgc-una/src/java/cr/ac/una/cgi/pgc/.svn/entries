@@ -1,0 +1,23 @@
+9
+
+dir
+0
+svn+ssh://pgc@201.194.57.34/home/svn/pgc/interfaz2/trunk/src/java/cr/ac/una/cgi/pgc
+svn+ssh://pgc@201.194.57.34/home/svn/pgc
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+messages
+dir
+
+
+
+add
+

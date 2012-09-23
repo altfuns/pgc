@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<faces-config version="1.2"  xmlns="http://java.sun.com/xml/ns/javaee"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">    
+    <managed-bean>
+        <managed-bean-name>EmpleadoFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloAdministracion.EmpleadoFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>UnidadFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloAdministracion.UnidadFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>RutaFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloAdministracion.RutaFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>CorrespondenciaInternaFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloRutas.CorrespondenciaInternaFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>CorrespondenciaExternaFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloExterna.CorrespondenciaExternaFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>GrupoEnvíoFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloAdministracion.GrupoEnvíoFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>PaisFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloAdministracion.PaisFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>FacturaFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloExterna.FacturaFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>MovimientoPresupuestoFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloExterna.MovimientoPresupuestoFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>    
+    <managed-bean>
+        <managed-bean-name>TarifaFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloAdministracion.TarifaFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>PermisoFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloAdministracion.PermisoFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>ConsultaExterna</managed-bean-name>
+        <managed-bean-class>ModuloExterna.ConsultaExterna</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>NotaFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloExterna.NotaFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>EstadisticaFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloEstadistica.EstadisticaFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>SeguridadManagedBean</managed-bean-name>
+        <managed-bean-class>Seguridad.SeguridadManagedBean</managed-bean-class>
+        <managed-bean-scope>session</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>BienvenidaManagedBean</managed-bean-name>
+        <managed-bean-class>Seguridad.BienvenidaManagedBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+    <managed-bean>
+        <managed-bean-name>TipoInternoFacadeManaged</managed-bean-name>
+        <managed-bean-class>ModuloAdministracion.TipoInternoFacadeManaged</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
+</faces-config>
+
+
+
+
+
+
+
+
+
+
+
+

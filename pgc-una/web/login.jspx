@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : pgc-una
+    Created on : 15/03/2010, 09:02:08 AM
+    Author     : red
+-->
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <title>UNA | Oficina Postal | Ingreso de Usuarios</title>
+                <ice:outputStyle href="./resources/rime/rime.css" id="rimeStyle"/>
+                <ice:outputStyle href="./resources/paneles.css" id="panelesStyle"/>
+            </head>
+            <body>
+                <table width="100%" style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="./resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="./resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td width="100%" valign="top" align="center" style="height:100%">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Ingreso de Usuarios" />
+                            </p>
+                            <ice:form id="frm_principal">
+                                <br /><br />
+                                <ice:panelGrid id="pgrd_principal" style="width: 45%; align: center;">
+                                        <ice:outputText id="ot_instrucciones" value="Introduzca la información necesaria para ingresar al sistema." />
+                                        <br />
+                                        <ice:menuItemSeparator id="mis_separador" />
+                                        <br />
+                                        <ice:panelGrid id="pgrd_ingreso" columns="2">
+                                            <ice:outputText id="ot_identificacion" value="Identificación: " />
+                                            <ice:inputText id="it_identificador" value="#{SeguridadManagedBean.id}" maxlength="9"/>
+                                            <ice:outputText id="ot_clave" value="Contraseña: " />
+                                            <ice:inputSecret id="is_contraseña" value="#{SeguridadManagedBean.contra}" maxlength="6"/>
+                                        </ice:panelGrid>
+                                        <br />                                        
+                                        <p align="center">
+                                            <ice:commandButton id="cb_ingresar" value="Ingresar al sistema" actionListener="#{SeguridadManagedBean.action_cb_ingresarUsuario}" />
+                                        </p>
+                                        <br />
+                                        <p align="right">
+                                            <a href="http://www.claves.una.ac.cr">Cambiar la clave de acceso</a>
+                                        </p>
+
+                                    </ice:panelGrid>
+                                </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="td_footer" colspan="2">
+                            <ice:panelGroup styleClass="footer" effect="#{SeguridadManagedBean.efecto}">
+                                <ice:outputText id="south" value="#{SeguridadManagedBean.infoFooter}"/>
+                                <ice:outputText id="ot_cargar" value="#{Log.init}" visible="false" />
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

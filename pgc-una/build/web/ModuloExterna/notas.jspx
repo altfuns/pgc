@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Original: Alfonso Aguilar Sánchez
+    Revisado por: Jeremy Guzmán Salazar
+
+    Creado:
+        5   enero   2010.
+
+    Revisiones:
+        31  enero   2010.
+        01  febrero 2010.
+
+    Lista de requerimientos:
+        * Funcionales: En proceso
+        * No funcionales: En Proceso
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Implementación de Beans.
+
+-->
+
+<jsp:root version="2.0" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:ice="http://www.icesoft.com/icefaces/component" xmlns:jsp="http://java.sun.com/JSP/Page">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>UNA | Oficina Postal | Administración de Notas Crédito/Débito</title>
+            </head>
+            <body>
+                <table width="100%" style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="100%" valign="top" style="height:100%">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Correos de Costa Rica | Administración de Notas" />
+                            </p>
+                            <ice:form id="frm_principal">
+                                <ice:panelGroup styleClass="contenido">
+                                    <ice:panelGroup styleClass="sysnopsisBox panelCollapsible">
+                                        
+                                    </ice:panelGroup>
+                                    <ice:panelGroup styleClass="central">
+                                        <ice:panelCollapsible id="pclp_notas" expanded="true">
+                                            <f:facet name="header">
+                                                <ice:panelGroup>
+                                                    <ice:outputText id="notasHeader" value="Notas Crédito" />
+                                                </ice:panelGroup>
+                                            </f:facet>
+                                            <ice:panelGrid columns="2" cellspacing="4" cellpadding="4" width="100%" styleClass="formulario">
+                                                <ice:panelGrid columns="2">
+                                                    <!-- Fecha -->
+                                                    <ice:outputText id="ot_fecha" value="Fecha :" />
+                                                    <ice:panelGrid columns="1">
+                                                        <ice:selectInputDate id="sid_fecha" value="#{NotaFacadeManaged.notaLocal.fecha}"
+                                                                             renderAsPopup="true" required="true" >
+                                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                        </ice:selectInputDate>
+                                                        <ice:message for="sid_fecha" id="ms_fecha_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+                                                    
+                                                    <!-- Numero de Factura -->
+                                                    <ice:outputLabel for="ot_numeroFactura" value="Número de factura:"></ice:outputLabel>
+                                                    <ice:panelGrid columns="1">
+                                                        <ice:selectInputText id="sit_numeroFactura" required="true"
+                                                                         value="#{NotaFacadeManaged.notaLocal.numeroFacturaString}"
+                                                                         rows="#{NotaFacadeManaged.cantidadFacturas}"
+                                                                         listVar="factura"
+                                                                         listValue="#{NotaFacadeManaged.posiblesFacturas}"
+                                                                         valueChangeListener="#{NotaFacadeManaged.ValueChange_sit_facturaAutocompletar}" >
+                                                            <f:facet name="selectInputText">
+                                                                <ice:panelGrid columns="3"
+                                                                               columnClasses="numeroCol,fechaCol,montoCol">
+                                                                    <ice:outputText id="AutoCmpCty" value="#{factura.numero}"/>
+                                                                    <ice:outputText id="AutoCmpSt" value="#{factura.fecha}">
+                                                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                                    </ice:outputText>
+                                                                    <ice:outputText id="AutoCmpZip" value="#{factura.monto}"/>
+                                                                </ice:panelGrid>
+                                                            </f:facet>
+                                                        </ice:selectInputText>
+                                                        <ice:message for="sid_numeroFactura" id="ms_factura_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+                                                    
+                                                    <!-- Tipo -->
+                                                    <ice:outputText id="ot_tipoF" value="Tipo de Nota" />
+                                                    <ice:panelGrid columns="1">
+                                                        <ice:selectOneRadio id="sor_tipos" required="true"
+                                                                            value="#{NotaFacadeManaged.notaLocal.tipo}">
+                                                            <f:selectItems id="sis_tipos" value="#{NotaFacadeManaged.tipos}" />
+                                                        </ice:selectOneRadio>
+                                                        <ice:message for="sor_tipoe" id="ms_tipo_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+                                                    
+                                                    <!-- N�mero Nota -->
+                                                    <ice:outputText id="ot_numero" value="Número de Nota:" />
+                                                    <ice:panelGrid columns="1">
+                                                        <ice:inputText id="it_numero" required="true" partialSubmit="true"
+                                                                       value="#{NotaFacadeManaged.notaLocal.numero}"
+                                                                       validator="#{NotaFacadeManaged.validateNumeroNota}">
+                                                            <f:validateLength maximum="20" minimum="4" />
+                                                        </ice:inputText>
+                                                       <ice:message for="it_numero"  id="ms_numero_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+                                                    
+                                                    <!-- Importe -->
+                                                    <ice:outputText id="ot_importe" value="Importe" />
+                                                    <ice:panelGrid columns="1">
+                                                        <ice:inputText id="it_importe" required="true" partialSubmit="true"
+                                                                       value="#{NotaFacadeManaged.notaLocal.monto}"
+                                                                       validator="#{NotaFacadeManaged.validateImporte}">
+                                                            <f:converter converterId="javax.faces.Double" />
+                                                            <f:convertNumber pattern="#,##0.00;(#,##0.00)" />
+                                                            <f:validateDoubleRange minimum="0.0" />
+                                                        </ice:inputText>
+                                                        <ice:message for="it_importe" id="ms_monto_error" errorClass="error" infoClass="info" />
+                                                    </ice:panelGrid>
+                                                    
+                                                    <!-- Botones  OK Cancel -->
+                                                    <ice:commandButton id="btnNotasAceptar" type="Submit" value="Ingresar"
+                                                                       panelConfirmation="pcfr_ingreso" action="#{NotaFacadeManaged.guardar}" />
+                                                    <ice:commandButton id="btnNotasCancelar" type="Reset" value="Cancelar"></ice:commandButton>
+                                                    <ice:panelConfirmation id="pcfr_ingreso" acceptLabel="Si" cancelLabel="No" message="¿Desea ingresar la nota número
+                                                                           #{NotaFacadeManaged.notaLocal.numero} con el monto #{NotaFacadeManaged.notaLocal.monto}?"
+                                                                           autoCentre="true" title="¡Atención!"/>
+                                                </ice:panelGrid>
+                                                <ice:panelGroup id="panelTablaNotas">
+                                                    <ice:dataTable id="tablaNotas"  value="#{NotaFacadeManaged.listaNotas}"
+                                                                   var="nota" width="100%"
+                                                                   sortColumn=""
+                                                                   sortAscending="">
+                                                        <!-- Columna Ordenar Fecha -->
+                                                        <ice:column id="dc_fecha"  styleClass="#{nota.cssClass}">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="fechaHeaderNota"
+                                                                                       columnName="fecha" >
+                                                                    <ice:outputText id="ot_fechaNotaT" value="Fecha" />
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_fechaNota" value="#{nota.fecha}" >
+                                                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                                    </ice:outputText>
+                                                        </ice:column>
+                                                        <!-- Columna Ordenar Numero Factura -->
+                                                        <ice:column id="dc_facturaNota" styleClass="#{nota.cssClass}" >
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="facturaHeaderNota" columnName="factura" >
+                                                                    <ice:outputText id="ot_facturaNotaT" value="Número de Factura"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_facturaNota" value="#{nota.numeroFactura.numero}" />
+                                                        </ice:column>
+                                                        <!-- Columna Ordenar Tipo -->
+                                                        <ice:column id="dc_tipo"  styleClass="#{nota.cssClass}">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="tipoHeaderNota" columnName="tipo" >
+                                                                    <ice:outputText id="ot_tipoNotaT" value="Tipo de Nota"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_tipoNota" value="#{nota.tipoString}" />
+                                                        </ice:column>
+                                                        <!-- Columna Ordenar Numero Nota -->
+                                                        <ice:column id="dc_numeroNota"  styleClass="#{nota.cssClass}">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="numeroHeaderNota"
+                                                                                       columnName="numero" >
+                                                                    <ice:outputText id="ot_numeroNotaT" value="Número de Nota"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_numeroNota" value="#{nota.numero}"/>
+                                                        </ice:column>
+                                                        <!-- Columna Ordenar Importe -->
+                                                        <ice:column id="dc_importe"  styleClass="#{nota.cssClass}">
+                                                            <f:facet name="header">
+                                                                <ice:commandSortHeader id="importeHeaderNota"
+                                                                                       columnName="importeNota" >
+                                                                    <ice:outputText id="ot_importeT" value="Importe"/>
+                                                                </ice:commandSortHeader>
+                                                            </f:facet>
+                                                            <ice:outputText id="importeNota" value="#{nota.monto}" />
+                                                        </ice:column>
+                                                    </ice:dataTable>
+                                                        <ice:panelGrid columns="2" >
+                                                            <ice:outputText id="ot_monto_ccr_etiqueta" value="Monto en Correos de Costa Rica" />
+                                                            <ice:outputText id="ot_monto_ccr_valor" value="#{MovimientoPresupuestoFacadeManaged.presupuestoCCR.monto}" >
+                                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)" />
+                                                            </ice:outputText>
+                                                            <ice:outputText id="ot_monto_una_etiqueta" value="Monto en Universidad Nacional" />
+                                                            <ice:outputText id="ot_monto_una_valor" value="#{MovimientoPresupuestoFacadeManaged.presupuestoUNA.monto}" >
+                                                                <f:convertNumber pattern="#,##0.00;(#,##0.00)" />
+                                                            </ice:outputText>
+                                                        </ice:panelGrid>
+                                                </ice:panelGroup>
+                                            </ice:panelGrid>
+                                        </ice:panelCollapsible>
+                                    </ice:panelGroup>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer">
+                                <ice:message for="frm_principal" id="barra_estado" errorStyle="color:red;" effect="" infoStyle="color : #003388;"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>
+

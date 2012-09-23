@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Original: Jeremy Guzmán Salazar
+    Revisado por:
+
+    Creado:
+        08  febrero 2010.
+
+    Revisiones:
+
+    Lista de requerimientos:
+        * Funcionales: En proceso
+        * No funcionales: En Proceso
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:
+        * Implementar Beans
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>Administración de Países</title>
+            </head>
+            <body>
+                <table>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGrid columns="4" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" style="logoUNA" />
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" style="logoPGC" />
+                                <ice:outputText id="slider" value="SLIDER"></ice:outputText>
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <!-- Correspondecia Interna menu -->
+                                            <ice:menuItem value="Interna"
+                                                          id="file" onclick="return false;">
+                                                <ice:menuItem action=""
+                                                              id="ingEnvios"
+                                                              value="Ingresar Envíos">
+                                                    <f:param name="myParam"
+                                                             value="Ingresar"/>
+                                                </ice:menuItem>
+                                            </ice:menuItem>
+
+                                            <!-- Correspondencia Externa menu -->
+                                            <ice:menuItem value="Externa"
+                                                          id="edit" onclick="return false;">
+                                                <ice:menuItem id="facturas"
+                                                              value="Facturas"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="notas"
+                                                              value="Notas"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="envios"
+                                                              value="Envíos"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="presupuesto"
+                                                              value="Presupuesto"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                                <ice:menuItem id="consulta"
+                                                              value="Consulta"
+                                                              actionListener="#{menuBar.primaryListener}">
+                                                </ice:menuItem>
+                                            </ice:menuItem>
+
+                                            <!-- View menu -->
+                                            <ice:menuItem value="Salir" id="salir" onclick="return false;">
+                                            </ice:menuItem>
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td>
+                            <ice:form id="frm_principal">
+                                <ice:panelGrid id="pgrd_principal" columns="2">
+                                    <ice:panelGrid id="pgrd_grupos" columns="2">
+                                        <ice:panelGroup id="pgrp_grupos">
+                                            <p align="center"><ice:outputText id="ot_tituloG" value="Grupos de Envío" /></p>
+                                            <ice:selectOneRadio id="sor_grupos" value="Grupo 1">
+                                                <f:selectItem id="sit_grupos1" value="Grupo1"  itemLabel="Grupo 1"/>
+                                                <f:selectItem id="sit_grupos2" value="Grupo2"  itemLabel="Grupo 2"/>
+                                                <f:selectItem id="sit_grupos3" value="Grupo3"  itemLabel="Grupo 3"/>
+                                                <f:selectItem id="sit_grupos4" value="Grupo4"  itemLabel="Grupo 4"/>
+                                            </ice:selectOneRadio>
+                                        </ice:panelGroup>                                    
+                                        <ice:panelGroup id="pgrp_consulta">
+                                            <ice:outputText id="ot_tituloC" value="Países registrados en este grupo:" />
+                                            <p align="center">
+                                                <ice:selectOneListbox id="sol_consultaPais">
+                                                    <f:selectItem id="sit_consultaPais1" value="PI" itemLabel="Argentina" />
+                                                    <f:selectItem id="sit_consultaPais2" value="PI" itemLabel="Venezuela" />
+                                                    <f:selectItem id="sit_consultaPais3" value="PI" itemLabel="Uruguay" />
+                                                </ice:selectOneListbox>
+                                            </p>
+                                        </ice:panelGroup>
+                                    </ice:panelGrid>                                
+                                    <ice:panelGrid id="pgrd_formulario" columns="2" cellspacing="5">
+                                        <ice:outputText id="ot_pais" value="Ingrese el nuevo país:" />
+                                        <ice:selectInputText id="sit_pais" value="Pais" />
+                                        <ice:commandButton id="cb_agregarPais" value="Agregar País" />
+                                    </ice:panelGrid>
+                                </ice:panelGrid>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer">
+                                <ice:outputText id="south" value="Barra de estado"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

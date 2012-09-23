@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+Lista de requerimientos:
+        * Funcionales:
+            * Agregar registros recibidos
+            * Agregar registros completos
+            * Modificar registros
+            * Consultar correspondencia de tres días (paginator)
+            * Actualizar la correspondencia de tres día atras (paginator)
+            * Eliminar correspondencia de tres días atras (checkbox)
+        * No funcionales:
+            * La modificación de correspondencia solo se realiza de tres días atrás
+            * Se administran los datos por la ruta
+            * Solo se agregan registros si la fecha de consultas es hoy
+
+    Material Consultado: http://component-showcase.icefaces.org/component-showcase/showcase.iface.
+    Ayuda externa: Ninguna (por el momento).
+
+    Validaciones:
+        * Alguna de las dos unidades (destino - procedencia) se debe conocer
+        * 
+
+    Acciones a tomar:
+        * Implementación de JavaReports
+        * Pruebas:
+            * Usabilidad
+            * Resistencia
+            * Estrés
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <title>UNA | Oficina Postal | Control de Correspondencia</title>
+                <ice:outputStyle href="../resources/rime/rime.css" id="rimeStyle"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+            </head>
+            <body>
+                <table width="100%"  style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="100%">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Correspondencia Interna - Externa por Mensajero Propio | Control de Correspondencia" />
+                            </p>
+                            <ice:form id="frm_Titulo">
+                                <ice:panelGrid id="pgrd_Titulo" width="100%">                                    
+                                    <ice:panelGrid cellspacing="5" columns="2" id="pgrd_Ruta">
+                                        <ice:outputText id="ot_fechaIngreso" value="Fecha de entrega de la correspondencia al mensajero: " />
+                                        <ice:selectInputDate id="sid_fechaIngreso" renderAsPopup="true" value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.fechaIngreso}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </ice:selectInputDate>
+                                        <ice:outputText id="ot_mensajeroEntrega" value="Mensajero que recibió la correspondencia: " />
+                                        <ice:selectOneMenu id="som_mensajeroEntrega" partialSubmit="true" value="#{CorrespondenciaInternaFacadeManaged.empleadoSel}" valueChangeListener="#{CorrespondenciaInternaFacadeManaged.valueChange_som_seleccionarEmpleado}">
+                                            <f:selectItems id="sits_mensajeroEntrega" value="#{CorrespondenciaInternaFacadeManaged.empleadoOriginal}" />
+                                        </ice:selectOneMenu>
+                                        <ice:outputText id="ot_ruta" value="Ruta: "/>
+                                        <ice:selectOneMenu id="som_rutas" partialSubmit="true" autocomplete="true" value="#{CorrespondenciaInternaFacadeManaged.rutaSeleccionada}">
+                                            <f:selectItems id="sits_rutas" value="#{CorrespondenciaInternaFacadeManaged.rutas}" />
+                                        </ice:selectOneMenu>
+                                    </ice:panelGrid>
+                                </ice:panelGrid>
+                            </ice:form>
+                            <ice:form id="botones">
+                                <ice:panelGrid id="pgrd_resource" columns="2">
+                                    <!--<ice:commandButton id="cb_guardarPDF" partialSubmit="true" value="Guardar en PDF" actionListener="#{CorrespondenciaInternaFacadeManaged.action_cb_guardarPDF}" />-->
+                                    <ice:outputResource id="or_pdfResource"
+                                                        resource="#{CorrespondenciaInternaFacadeManaged.archivoPDF}" mimeType="application/pdf"
+                                                        fileName="Bajar PDF" type="button" />                                    
+                                </ice:panelGrid>
+                            </ice:form>
+                            <ice:form id="frm_principal">                                
+                                <br />
+                                <p align="center"><b><ice:outputText id="ot_linkHeader" value="Tabla de Control de Correspondencia" /></b></p>
+                                <ice:menuItemSeparator id="mis_separator" /><br />
+                                <ice:outputText id="fechaCorrespondencia" value="Fecha de correspondencia:
+                                                #{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.etqFechaComparacion}" />
+                                <ice:panelGroup id="pgrd_principal">
+                                    <ice:dataTable border="2" id="dt_tablaControlCorrespondencia" value="#{CorrespondenciaInternaFacadeManaged.registrosCorrespondenciaInterna}" var="registro" rows="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.cantidadRegistros}" width="100%">
+                                        <ice:column id="dc_unidad">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_unidad" value="Procedencia *"/>
+                                            </f:facet>
+                                            <ice:selectInputText id="sit_remitente" rows="#{UnidadFacadeManaged.cantidadUnidades}"
+                                                                 maxlength="95" value="#{registro.procedenciaUnidad}" valueChangeListener="#{UnidadFacadeManaged.valueChange_sit_unidadAutocompletar}"
+                                                                 disabled="#{registro.disable}" listVar="unidadP"
+                                                                 listValue="#{UnidadFacadeManaged.unidadAutoCompletar}" >
+                                                <f:facet name="selectInputText">
+                                                    <ice:panelGrid columns="2" cellpadding="5" cellspacing="5" columnClasses="colAcron, colNombre">
+                                                        <ice:outputText id="ot_acron" value="#{unidadP.acron}" />
+                                                        <ice:outputText id="ot_nombre" value="#{unidadP.nombre}" />
+                                                    </ice:panelGrid>
+                                                </f:facet>
+                                            </ice:selectInputText>
+                                        </ice:column>
+                                        <ice:column id="dc_oficio">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_oficio" value="Número de Oficio"/>
+                                            </f:facet>
+                                            <ice:selectInputText id="sit_oficio" value="#{registro.codigo}" disabled="#{registro.disable}" maxlength="30"/>
+                                        </ice:column>
+                                        <ice:column id="dc_tipo">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_tipo" value="Tipo de Correspondencia *"/>
+                                            </f:facet>
+                                            <ice:selectOneMenu id="som_tipo" partialSubmit="true" autocomplete="true" value="#{registro.tipoLocal}" disabled="#{registro.disable}" valueChangeListener="#{CorrespondenciaInternaFacadeManaged.valueChange_som_seleccionarTipo}">
+                                                <f:selectItems id="sits_tipo" value="#{CorrespondenciaInternaFacadeManaged.tipos}"/>
+                                            </ice:selectOneMenu>
+                                        </ice:column>
+                                        <ice:column id="dc_destinatario">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_destinatario" value="Destinatario"/>
+                                            </f:facet>
+                                            <ice:selectInputText id="sit_destinatario" value="#{registro.destinatario}" disabled="#{registro.disable}" maxlength="80" />
+                                        </ice:column>
+                                        <ice:column id="dc_destino">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_destino" value="Unidad de Destino *"/>
+                                            </f:facet>
+                                            <ice:selectInputText id="sit_destino" rows="#{UnidadFacadeManaged.cantidadUnidades}" 
+                                                                 maxlength="95" value="#{registro.destinoUnidad}" valueChangeListener="#{UnidadFacadeManaged.valueChange_sit_unidadAutocompletar}"
+                                                                 disabled="#{registro.disable}" listVar="unidadD"
+                                                                 listValue="#{UnidadFacadeManaged.unidadAutoCompletar}" >
+                                                <f:facet name="selectInputText">
+                                                    <ice:panelGrid columns="2" cellpadding="5" cellspacing="5" columnClasses="colAcron, colNombre">
+                                                        <ice:outputText id="ot_acron" value="#{unidadD.acron}" />
+                                                        <ice:outputText id="ot_nombre" value="#{unidadD.nombre}" />
+                                                    </ice:panelGrid>
+                                                </f:facet>
+                                            </ice:selectInputText>
+                                        </ice:column>
+                                        <ice:column id="dc_persona">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_persona" value="Recibido por"/>
+                                            </f:facet>
+                                            <ice:selectInputText id="sit_persona" value="#{registro.nombreRecibido}" disabled="#{registro.disable}" maxlength="50" />
+                                        </ice:column>
+                                        <ice:column id="dc_fecha">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_fecha" value="Fecha de Recibido"/>
+                                            </f:facet>
+                                            <ice:selectInputDate id="sid_fecha" renderAsPopup="true" value="#{registro.fechaRecibido}" disabled="#{registro.disable}">
+                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                            </ice:selectInputDate>
+                                        </ice:column>
+                                        <ice:column id="dc_mensajero">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_mensajero" value="Mensajero Responsable"/>
+                                            </f:facet>
+                                            <ice:selectInputText id="sit_mensajero" autocomplete="true" partialSubmit="true" value="#{registro.mensajeroResponsable}"
+                                                                 valueChangeListener="#{CorrespondenciaInternaFacadeManaged.valueChange_sit_empleadoAutocompletar}"
+                                                                 listValue="#{CorrespondenciaInternaFacadeManaged.empleadoAutoCompletar}" listVar="empleado" disabled="#{registro.disable}">
+                                                <f:facet name="selectInputText">
+                                                    <ice:outputText id="AutoCmpNom" value="#{empleado.nombre} #{empleado.middleName} #{empleado.apellidos}"/>
+                                                </f:facet>
+                                            </ice:selectInputText>
+                                        </ice:column>
+                                        <ice:column id="dc_eliminar">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_eliminar" value="Eliminar" />
+                                            </f:facet>
+                                            <ice:selectBooleanCheckbox id="sbc_eliminar" partialSubmit="true" value="#{registro.aEliminar}" disabled="#{registro.disable}" />
+                                        </ice:column>
+                                        <ice:column id="dc_disable">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_disable" value="Congelar" />
+                                            </f:facet>
+                                            <ice:selectBooleanCheckbox id="sbc_disable" partialSubmit="true" value="#{registro.disable}" />
+                                        </ice:column>
+                                    </ice:dataTable>
+                                </ice:panelGroup>
+
+                            </ice:form>
+                            <ice:form id="frm_acciones">
+                                <ice:panelPopup id="ppop_errores"
+                                                draggable="false" modal="true"
+                                                visible="#{CorrespondenciaInternaFacadeManaged.popupVisible}"
+                                                styleClass="corePopup">
+                                    <f:facet name="header">
+                                        <ice:panelGroup styleClass="popupHeaderWrapper">
+                                            <ice:outputText
+                                                value="Error"
+                                                styleClass="popupHeaderText"/>                                            
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                    <f:facet name="body">
+                                        <ice:panelGroup styleClass="popupBody">
+                                            <ice:outputText value="#{CorrespondenciaInternaFacadeManaged.errorConexion}"/><br/>
+                                            <p align="center">
+                                                <ice:commandButton id="modalPnlCloseButton" type="submit"
+                                                                   value="Cerrar" actionListener="#{CorrespondenciaInternaFacadeManaged.action_cb_cerrarPopup}" /></p>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                </ice:panelPopup>
+                                <ice:panelConfirmation id="pcrf_borrarRegistros" acceptLabel="Si" cancelLabel="No"
+                                                       autoCentre="true" message="Los cambios que no han sido guardados se borrarán. ¿Desea continuar?"
+                                                       title="¡Atención!" />
+                                <ice:panelConfirmation id="pcrf_borrarRegistro" acceptLabel="Si" cancelLabel="No"
+                                                       autoCentre="true" message="¿Desea realmente borrar este registro?"
+                                                       title="¡Atención!" />
+                                <ice:panelConfirmation id="pcrf_guardarCambios" acceptLabel="Si" cancelLabel="No"
+                                                       autoCentre="true" message="¿Desea guardar los cambios dentro de la tabla?"
+                                                       title="¡Atención!" />
+                                <p align="center">
+                                    <ice:panelGrid id="pgrd_paginator" columns="3">
+                                        <ice:commandButton id="cb_retroceder" panelConfirmation="pcrf_borrarRegistros" value="Retroceder" image="../resources/rime/css-images/cal_arrow_left_dis.gif" disabled="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.estadoPaginador[0]}" actionListener="#{CorrespondenciaInternaFacadeManaged.action_cb_elegirDia}"/>
+                                        <ice:commandButton id="cb_centro" value="Centro" image="../resources/rime/css-images/PnlHdr_down_dis.gif" disabled="true"/>
+                                        <ice:commandButton id="cb_avanzar" panelConfirmation="pcrf_borrarRegistros" value="Avanzar" image="../resources/rime/css-images/cal_arrow_right_dis.gif" disabled="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.estadoPaginador[1]}" actionListener="#{CorrespondenciaInternaFacadeManaged.action_cb_elegirDia}"/>
+                                    </ice:panelGrid>
+                                </p>
+                                <p align="center">
+                                    <ice:panelGrid id="pgrd_acciones" columns="3" cellspacing="15">
+                                        <ice:commandButton id="cb_guardar" panelConfirmation="pcrf_guardarCambios" value="Guardar" partialSubmit="true" actionListener="#{CorrespondenciaInternaFacadeManaged.action_cb_guardarPagina}" />
+                                        <ice:commandButton id="cd_cancelar" panelConfirmation="pcrf_borrarRegistros" value="Cancelar" partialSubmit="true" actionListener="#{CorrespondenciaInternaFacadeManaged.action_cb_cancelarCambios}" />
+                                        <ice:commandButton id="cd_agregarFilas" value="Agregar Filas" actionListener="#{CorrespondenciaInternaFacadeManaged.action_cb_agregarRegistrosVacios}" partialSubmit="true" />
+                                    </ice:panelGrid>
+                                </p>
+                            </ice:form>                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="td_footer" colspan="2">                            
+                            <ice:panelGroup styleClass="footer" effect="#{CorrespondenciaInternaFacadeManaged.efecto}">
+                                <ice:outputText id="south" value="#{CorrespondenciaInternaFacadeManaged.infoFooter}"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

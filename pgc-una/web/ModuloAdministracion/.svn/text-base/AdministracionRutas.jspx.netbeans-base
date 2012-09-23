@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : pgc-una
+    Created on : 23/01/2010, 03:31:17 PM
+    Author     : red
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+            <html>
+                <head>
+                    <title>Administración de las Rutas</title>
+                </head>
+                <body>
+                    <ice:form id="frm_encabezado">
+                        <ice:outputText value="Welcome to Prueba" />
+                    </ice:form>
+                </body>
+            </html>
+    </f:view>
+</jsp:root>

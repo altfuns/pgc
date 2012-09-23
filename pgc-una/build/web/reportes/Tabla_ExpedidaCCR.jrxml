@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ExpedidaCCR" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table" isDefault="false">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" isDefault="false" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" isDefault="false" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1" isDefault="false">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" isDefault="false" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" isDefault="false" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" isDefault="false" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="EXP_CCR">
+		<queryString>
+			<![CDATA[select
+sum(nacionalPrecio) as nacionalPrecio,
+sum(extranjeroPrecio) as extranjeroPrecio,
+sum(nacionalCantidad) as nacionalCantidad,
+sum(extranjeroCantidad) as extranjeroCantidad,
+sum(nacionalPrecio) + sum(extranjeroPrecio) as totalMonto,
+sum(nacionalCantidad) + sum(extranjeroCantidad) as totalCantidad,
+mes as numeromes,anio,
+case
+when mes = 1 then 'Enero'
+when mes = 2 then 'Febrero'
+when mes = 3 then 'Marzo'
+when mes = 4 then 'Abril'
+when mes = 5 then 'Mayo'
+when mes = 6 then 'Junio'
+when mes = 7 then 'Julio'
+when mes = 8 then 'Agosto'
+when mes = 9 then 'Septiembre'
+when mes = 10 then 'Octubre'
+when mes = 11 then 'Noviembre'
+when mes = 12 then 'Diciembre'
+end as mes
+from
+(SELECT
+     case when externa.pais = 'NACCR' then sum(externa."precio") else 0 end AS nacionalPrecio,
+     case when externa.pais <> 'NACCR' then sum(externa."precio") else 0 end AS extranjeroPrecio,
+     case when externa.pais = 'NACCR' then sum(externa."cantidad") else 0 end AS nacionalCantidad,
+     case when externa.pais <> 'NACCR' then sum(externa."cantidad") else 0 end AS extranjeroCantidad,
+     DATE_PART('MONTH',externa."fecha") AS mes,
+     DATE_PART('YEAR',externa."fecha") AS anio
+FROM
+     "public"."correspondencia_externa" externa
+group by externa.pais,DATE_PART('MONTH',externa."fecha"),DATE_PART('YEAR',externa."fecha")) T
+group by mes,anio
+order by numeromes;]]>
+		</queryString>
+		<field name="nacionalprecio" class="java.lang.Double"/>
+		<field name="extranjeroprecio" class="java.lang.Double"/>
+		<field name="nacionalcantidad" class="java.math.BigDecimal"/>
+		<field name="extranjerocantidad" class="java.math.BigDecimal"/>
+		<field name="totalmonto" class="java.lang.Double"/>
+		<field name="totalcantidad" class="java.math.BigDecimal"/>
+		<field name="numeromes" class="java.lang.Double"/>
+		<field name="anio" class="java.lang.Double"/>
+		<field name="mes" class="java.lang.String"/>
+		<variable name="cant_nac" class="java.lang.Integer" calculation="Sum">
+			<variableExpression><![CDATA[$F{nacionalcantidad}]]></variableExpression>
+		</variable>
+		<variable name="monto_nac" class="java.lang.Integer" calculation="Sum">
+			<variableExpression><![CDATA[$F{nacionalprecio}]]></variableExpression>
+		</variable>
+		<variable name="cant_ext" class="java.lang.Integer" calculation="Sum">
+			<variableExpression><![CDATA[$F{extranjerocantidad}]]></variableExpression>
+		</variable>
+		<variable name="monto_ext" class="java.lang.Integer" calculation="Sum">
+			<variableExpression><![CDATA[$F{extranjeroprecio}]]></variableExpression>
+		</variable>
+		<variable name="cant_mes" class="java.lang.Integer" calculation="Sum">
+			<variableExpression><![CDATA[$F{totalcantidad}]]></variableExpression>
+		</variable>
+		<variable name="monto_mes" class="java.lang.Integer" calculation="Sum">
+			<variableExpression><![CDATA[$F{totalmonto}]]></variableExpression>
+		</variable>
+	</subDataset>
+	<parameter name="anio" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+sum(nacionalPrecio) as nacionalPrecio,
+sum(extranjeroPrecio) as extranjeroPrecio,
+sum(nacionalCantidad) as nacionalCantidad,
+sum(extranjeroCantidad) as extranjeroCantidad,
+sum(nacionalPrecio) + sum(extranjeroPrecio) as totalMonto,
+sum(nacionalCantidad) + sum(extranjeroCantidad) as totalCantidad,
+mes as numeromes,anio,
+case
+when mes = 1 then 'Enero'
+when mes = 2 then 'Febrero'
+when mes = 3 then 'Marzo'
+when mes = 4 then 'Abril'
+when mes = 5 then 'Mayo'
+when mes = 6 then 'Junio'
+when mes = 7 then 'Julio'
+when mes = 8 then 'Agosto'
+when mes = 9 then 'Septiembre'
+when mes = 10 then 'Octubre'
+when mes = 11 then 'Noviembre'
+when mes = 12 then 'Diciembre'
+end as mes
+from
+(SELECT
+     case when externa.pais = 'NACCR' then sum(externa."precio") else 0 end AS nacionalPrecio,
+     case when externa.pais <> 'NACCR' then sum(externa."precio") else 0 end AS extranjeroPrecio,
+     case when externa.pais = 'NACCR' then sum(externa."cantidad") else 0 end AS nacionalCantidad,
+     case when externa.pais <> 'NACCR' then sum(externa."cantidad") else 0 end AS extranjeroCantidad,
+     DATE_PART('MONTH',externa."fecha") AS mes,
+     DATE_PART('YEAR',externa."fecha") AS anio
+FROM
+     "public"."correspondencia_externa" externa WHERE DATE_PART('YEAR',externa."fecha") = $P{anio}
+group by externa.pais,DATE_PART('MONTH',externa."fecha"),DATE_PART('YEAR',externa."fecha")) T
+group by mes,anio
+order by numeromes;]]>
+	</queryString>
+	<field name="nacionalprecio" class="java.lang.Double"/>
+	<field name="extranjeroprecio" class="java.lang.Double"/>
+	<field name="nacionalcantidad" class="java.math.BigDecimal"/>
+	<field name="extranjerocantidad" class="java.math.BigDecimal"/>
+	<field name="totalmonto" class="java.lang.Double"/>
+	<field name="totalcantidad" class="java.math.BigDecimal"/>
+	<field name="numeromes" class="java.lang.Double"/>
+	<field name="anio" class="java.lang.Double"/>
+	<field name="mes" class="java.lang.String"/>
+	<variable name="cant_nac" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{nacionalcantidad}]]></variableExpression>
+	</variable>
+	<variable name="monto_nac" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{nacionalprecio}]]></variableExpression>
+	</variable>
+	<variable name="cant_ext" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{extranjerocantidad}]]></variableExpression>
+	</variable>
+	<variable name="monto_ext" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{extranjeroprecio}]]></variableExpression>
+	</variable>
+	<variable name="cant_mes" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalcantidad}]]></variableExpression>
+	</variable>
+	<variable name="monto_mes" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{totalmonto}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="4" y="2" width="551" height="20" forecolor="#999999" backcolor="#CCFF66"/>
+				<textElement textAlignment="Left">
+					<font fontName="Lucida Bright" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UNIVERSIDAD NACIONAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="22" width="551" height="20" forecolor="#999999" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Left">
+					<font fontName="Lucida Bright" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROGRAMA DE ABASTECIMIENTO Y APOYO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="4" y="42" width="551" height="20" forecolor="#999999"/>
+				<textElement textAlignment="Left">
+					<font fontName="Lucida Bright" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OFICINA POSTAL]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement x="162" y="10" width="272" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Bright" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Reporte de Correspondencia Expedida]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="243" y="30" width="101" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Bright" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Año " + $P{anio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="434" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="0" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="151">
+			<componentElement>
+				<reportElement key="table 1" style="table 1" isPrintRepeatedValues="false" x="0" y="0" width="555" height="151"/>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="EXP_CCR">
+						<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+					</datasetRun>
+					<jr:columnGroup width="90">
+						<jr:column width="90">
+							<jr:columnHeader style="table 1_CH" height="32" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="90" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<text><![CDATA[Mes]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter style="table 1_CH" height="24" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="90" height="24"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font isBold="false"/>
+									</textElement>
+									<text><![CDATA[Total Anual]]></text>
+								</staticText>
+							</jr:columnFooter>
+							<jr:detailCell style="table 1_TD" height="21" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="90" height="20"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.String"><![CDATA[$F{mes}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:column width="70">
+						<jr:columnHeader style="table 1_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[ Cantidad Nacional]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="24" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="70" height="24"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression class="java.lang.Integer"><![CDATA[$V{cant_nac}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 1_TD" height="21" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{nacionalcantidad}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:columnGroup width="70">
+						<jr:column width="70">
+							<jr:columnHeader style="table 1_CH" height="32" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="70" height="30"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<text><![CDATA[Monto Nacional]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:columnFooter style="table 1_CH" height="24" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="70" height="24"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.Integer"><![CDATA[$V{monto_nac}]]></textFieldExpression>
+								</textField>
+							</jr:columnFooter>
+							<jr:detailCell style="table 1_TD" height="21" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="70" height="20"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle"/>
+									<textFieldExpression class="java.lang.Double"><![CDATA[$F{nacionalprecio}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+					<jr:column width="70">
+						<jr:tableHeader style="table 1_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 1_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Cantidad Extranjera]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="24" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="70" height="24"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression class="java.lang.Integer"><![CDATA[$V{cant_ext}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 1_TD" height="21" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="70" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{extranjerocantidad}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="77">
+						<jr:tableHeader style="table 1_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 1_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="77" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Monto Extranjera]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="24" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="77" height="24"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression class="java.lang.Integer"><![CDATA[$V{monto_ext}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 1_TD" height="21" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="77" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression class="java.lang.Double"><![CDATA[$F{extranjeroprecio}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="76">
+						<jr:tableHeader style="table 1_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 1_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="76" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Cantidad Mensual]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="24" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="76" height="24"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression class="java.lang.Integer"><![CDATA[$V{cant_mes}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 1_TD" height="21" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="76" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{totalcantidad}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="90">
+						<jr:tableHeader style="table 1_TH" height="0" rowSpan="1"/>
+						<jr:columnHeader style="table 1_CH" height="32" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="90" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Monto Mensual]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:columnFooter style="table 1_CH" height="24" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="24"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression class="java.lang.Integer"><![CDATA[$V{monto_mes}]]></textFieldExpression>
+							</textField>
+						</jr:columnFooter>
+						<jr:detailCell style="table 1_TD" height="21" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="90" height="20"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression class="java.lang.Double"><![CDATA[$F{totalmonto}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</summary>
+</jasperReport>

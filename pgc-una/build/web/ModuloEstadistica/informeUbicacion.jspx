@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Original:       Luis Alfonso Aguilar
+    Revisado por:
+
+    Creado:
+        21  marzo    2010.
+
+    Revisiones:
+
+
+    Lista de requerimientos:
+        CU34: Generar reportes de gastos en un lapso de tiempo establecido por el usuario.
+        CU33: Generar informe anual de gastos.
+
+    Material Consultado:
+    Ayuda externa:
+
+    Acciones a tomar:
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <title>UNA | Oficina Postal | Informe de Envíos Nacionales e Internacionales</title>
+                <ice:outputStyle href="../resources/rime/rime.css" id="rimeStyle"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+            </head>
+            <body>
+                <table width="100%" style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr valign="top">
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="100%" valign="top" style="height:100%">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Estadística | Reporte de Correspondencia Expedida por Grupos de Envío" />
+                            </p>
+                            <ice:form id="frm_Titulo">
+                                <ice:panelGrid id="pgrd_Titulo" width="100%">
+                                    <ice:outputText id="ot_discripcion" value="Digite el año por el cual desea generar el reporte" />
+                                    <ice:panelGrid cellspacing="5" columns="2" id="pgrd_Envios">
+
+                                        <ice:outputText id="ot_anyo" value="Año : " />
+                                        <ice:panelGrid columns="2">
+                                            <ice:inputText id="it_anyo" value="#{EstadisticaFacadeManaged.anyo}"
+                                                           validator="#{EstadisticaFacadeManaged.validate_year}"
+                                                           partialSubmit="true" required="true">
+                                                <f:validateLength minimum="4" />
+                                                <f:validateLongRange minimum="1900" />
+                                            </ice:inputText>
+                                            <ice:message for="it_anyo" id="ms_anyo_error" errorClass="error" />
+                                        </ice:panelGrid>
+                                        <ice:commandButton id="cb_generar" value="Generar Reporte"  partialSubmit="true"
+                                                           action="#{EstadisticaFacadeManaged.generarInformeUbicacion}"/>
+                                    </ice:panelGrid>
+                                </ice:panelGrid>
+                            </ice:form>
+                            <ice:form id="frm_principal" >
+                                <ice:panelGrid id="algo" width="100%" visible="#{EstadisticaFacadeManaged.visible}">
+                                    <ice:panelCollapsible id="pclp_principal" expanded="true" >
+                                        <f:facet name="header">
+                                            <ice:outputText id="ot_linkHeader" value="Reporte de Correspondencia Expedida por Grupos de Envío" />
+                                        </f:facet>
+                                        <ice:panelGrid id="pgrp_principal" columns="1" width="100%">
+                                            <ice:panelGroup id="pgrp_tabla">
+                                                <ice:dataTable id="dataTbl" var="row" value="#{EstadisticaFacadeManaged.rowDataModel}"
+                                                               columnClasses="columnsColumn" width="100%">
+                                                    <f:facet name="header">
+                                                        <ice:outputText id="ot_tablaCosto" value="Tabla de costos de envíos por ubicación" style="width: 100;"/>
+                                                    </f:facet>
+                                                    <ice:column>
+                                                        <ice:outputText value="#{row}" style="font-weight: bold;"/>
+                                                    </ice:column>
+                                                    <ice:columns id="dc_reporteDataModel"
+                                                                 value="#{EstadisticaFacadeManaged.columnDataModel}"
+                                                                 var="column">
+                                                        <f:facet name="header">
+                                                            <ice:panelGroup >
+                                                                <ice:outputText id="ot_Encabeazados"
+                                                                                value="#{column}"/>
+                                                            </ice:panelGroup>
+                                                        </f:facet>
+                                                        <!-- Muestra los valores de cada celda-->
+                                                        <ice:panelGroup style="text-align: center; white-space: nowrap;" >
+                                                            <ice:outputText id="ot_celdaValor"
+                                                                            value="#{EstadisticaFacadeManaged.costoGrupoCellValue}"/>
+                                                        </ice:panelGroup>
+                                                    </ice:columns>
+                                                </ice:dataTable>
+                                                <br />
+                                                <ice:dataTable id="dataTblCantidad" var="row" value="#{EstadisticaFacadeManaged.rowDataModel}"
+                                                               columnClasses="columnsColumn" width="100%">
+                                                    <f:facet name="header">
+                                                        <ice:outputText id="ot_tablaCantidad" value="Reporte de Correspondencia Expedida por Grupos de Envío" style="width: 100;"/>
+                                                    </f:facet>
+                                                    <ice:column>
+                                                        <ice:outputText value="#{row}" style="font-weight: bold;"/>
+                                                    </ice:column>
+                                                    <ice:columns id="dc_reporteCantidadDataModel"
+                                                                 value="#{EstadisticaFacadeManaged.columnDataModel}"
+                                                                 var="column">
+                                                        <f:facet name="header">
+                                                            <ice:panelGroup >
+                                                                <ice:outputText id="ot_EncabeazadosCantidad"
+                                                                                value="#{column}"/>
+                                                            </ice:panelGroup>
+                                                        </f:facet>
+                                                        <!-- Muestra los valores de cada celda-->
+                                                        <ice:panelGroup style="text-align: center; white-space: nowrap;" >
+                                                            <ice:outputText id="ot_celdaValorCantidad"
+                                                                            value="#{EstadisticaFacadeManaged.cantidadGrupoCellValue}"/>
+                                                        </ice:panelGroup>
+                                                    </ice:columns>
+                                                </ice:dataTable>
+                                                <br />
+                                            </ice:panelGroup>
+                                            <ice:panelGroup id="pgr_grafico2" visible="#{EstadisticaFacadeManaged.visible}">
+                                                <ice:outputChart data="#{EstadisticaFacadeManaged.data}"
+                                                                 xaxisLabels="#{EstadisticaFacadeManaged.xLabels}"
+                                                                 yaxisTitle="#{EstadisticaFacadeManaged.ylabel}"
+                                                                 chartTitle="#{EstadisticaFacadeManaged.title}"
+                                                                 xaxisTitle="#{EstadisticaFacadeManaged.xlabel}"
+                                                                 labels="#{EstadisticaFacadeManaged.xlabel}"
+                                                                 type="bar"
+                                                                 width="1000"
+                                                                 renderOnSubmit="true">
+                                                </ice:outputChart>
+                                            </ice:panelGroup>
+                                        </ice:panelGrid>
+                                    </ice:panelCollapsible>
+                                    <ice:outputResource id="or_pdfResource"
+                                                        resource="#{EstadisticaFacadeManaged.resourceExpedida}"
+                                                        mimeType="application/pdf" fileName="Bajar PDF"
+                                                        type="button" />
+                                </ice:panelGrid>
+                            </ice:form>                  
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td id="td_footer" colspan="2">
+                            <ice:form id="frm_footer">
+                                <ice:panelGrid styleClass="footer">
+                                    <ice:outputText id="south" value="No hay información"/>
+                                </ice:panelGrid>
+                            </ice:form>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+
+    Lista de requerimientos:
+        * Funcionales:
+            * Agregar unidades
+            * Eliminar unidades en cascada
+
+        * No funcionales: En Proceso
+            * Averiguar el código de las unidades
+
+    Material Consultado:
+    Ayuda externa: Ninguna (por el momento).
+
+    Acciones a tomar:        
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>UNA | Oficina Postal | Administración de las Unidades</title>
+            </head>
+            <body>
+                <table width="100%" style="height:100%; vertical-align: top; ">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="100%" valign="top" style="height:100%;">
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Administración | Administración de Unidades" />
+                            </p>
+                            <ice:form id="frm_principal" style="vertical-align: top;">
+                                <ice:panelGrid id="pgrd_principal" columns="2" cellspacing="15" width="100%" style="vertical-align: top;">
+                                    <ice:panelGroup id="pgrp_unidades" title="Organigrama de la Universidad Nacional">
+                                        <ice:tree id="tr_unidades" value="#{UnidadFacadeManaged.model}" var="node"
+                                                  hideRootNode="false" hideNavigation="false" >
+                                            <ice:treeNode>                                                
+                                                <f:facet name="content">
+                                                    <ice:commandLink id="cl_treeNode" actionListener="#{UnidadFacadeManaged.action_cl_seleccionarUnidad}">
+                                                        <ice:outputText id="ot_idUnidad" value="#{node.userObject.unidad.codigo}" visible="false" />
+                                                        <ice:outputText id="ot_treeNode" value="#{node.userObject.text}" styleClass="treeSelectedNode" style="#{node.userObject.style}"/>
+                                                    </ice:commandLink>                                                    
+                                                </f:facet>                                                
+                                            </ice:treeNode>
+                                        </ice:tree>
+                                        <ice:panelConfirmation id="pcrf_eliminarUnidad" acceptLabel="Si" cancelLabel="No" autoCentre="true"
+                                                               message="¿Desea eliminar la unidad: #{UnidadFacadeManaged.unidadSel}?" title="¡Atención!" />
+                                        <p align="center"><ice:commandButton id="cb_eliminarUnidad" panelConfirmation="pcrf_eliminarUnidad" value="Eliminar Unidad" actionListener="#{UnidadFacadeManaged.action_cb_eliminarUnidad}" /></p>
+                                    </ice:panelGroup>                                    
+                                    <ice:panelGroup id="pgrp_acciones" style="vertical-align: top; height: 100%;">
+                                        <ice:panelGrid id="pgrd_consulta" columns="2" width="100%" styleClass="exampleBox backBeanChangeBody">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_consultaT" value="Unidad seleccionada" />
+                                            </f:facet>
+                                            <ice:outputText id="ot_codigoT" value="Código: " />
+                                            <ice:outputText id="ot_codigoC" value="#{UnidadFacadeManaged.auxUnidad.unidadSeleccionada.userObject.unidad.codigo}" />
+                                            <ice:outputText id="ot_nombreT" value="Nombre: " />
+                                            <ice:outputText id="ot_nombreC" value="#{UnidadFacadeManaged.auxUnidad.unidadSeleccionada.userObject.unidad.nombre}" />
+                                            <ice:outputText id="ot_siglasT" value="Siglas: " />
+                                            <ice:outputText id="ot_siglasC" value="#{UnidadFacadeManaged.auxUnidad.unidadSeleccionada.userObject.unidad.acron}" />
+                                        </ice:panelGrid>
+                                        <br /><br />
+                                        <b><ice:outputText id="ot_tituloNuevaU" value="Ingreso de Unidades" /></b>
+                                        <ice:menuItemSeparator id="mis_separator" /><br />
+                                        <ice:panelGrid id="pgrd_acciones" columns="2">
+                                            <ice:outputText id="ot_nuevaUnidad" value="Ingrese el nombre de la nueva unidad: " />
+                                            <ice:inputText id="it_nuevaUnidad" partialSubmit="true" value="#{UnidadFacadeManaged.auxUnidad.nuevaUnidad}" maxlength="75"/>
+                                            <ice:outputText id="ot_nuevoAcron" value="Ingrese las siglas de la unidad: " />
+                                            <ice:inputText id="it_nuevoAcron" value="#{UnidadFacadeManaged.auxUnidad.nuevoAcron}" maxlength="10" />
+                                        </ice:panelGrid>
+                                        <ice:panelConfirmation id="pcrf_agregarUnidad" acceptLabel="Si" cancelLabel="No" autoCentre="true"
+                                                               message="¿Desea agregar la unidad: #{UnidadFacadeManaged.auxUnidad.nuevaUnidad}?" title="¡Atención!" />
+                                        <p align="center"><ice:commandButton id="cb_nuevaUnidad" panelConfirmation="pcrf_agregarUnidad" value="Agregar Unidad" actionListener="#{UnidadFacadeManaged.action_cb_agregarUnidad}" /></p>
+                                    </ice:panelGroup>
+                                </ice:panelGrid>
+                            </ice:form>
+                            <ice:form id="frm_paneles">
+                                <ice:panelPopup id="ppop_errores"
+                                                draggable="false" modal="true"
+                                                visible="#{UnidadFacadeManaged.errorVisible}"
+                                                styleClass="corePopup">
+                                    <f:facet name="header">
+                                        <ice:panelGroup styleClass="popupHeaderWrapper">
+                                            <ice:outputText
+                                                value="Error"
+                                                styleClass="popupHeaderText"/>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                    <f:facet name="body">
+                                        <ice:panelGroup styleClass="popupBody">
+                                            <ice:outputText value="#{UnidadFacadeManaged.mensajeError}"/><br/>
+                                            <p align="center">
+                                                <ice:commandButton id="modalPnlCloseButton" type="submit"
+                                                                   value="Cerrar" actionListener="#{UnidadFacadeManaged.action_cb_cerrarPopup}" /></p>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                </ice:panelPopup>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer">
+                                <ice:outputText id="south" value="Barra de estado"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

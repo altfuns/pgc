@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="expedidaUnidad" language="groovy" pageWidth="825" pageHeight="572" orientation="Landscape" columnWidth="795" leftMargin="15" rightMargin="15" topMargin="15" bottomMargin="15">
+	<property name="ireport.zoom" value="0.75"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" isDefault="false" hAlign="Center"/>
+	<parameter name="anio" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	u1.codigo, u1.nombre, u2.nombre as facultad, SUM(ce.peso)/1000 AS peso,
+	CASE
+	WHEN DATE_PART('MONTH', ce.fecha) = 1 THEN 'Enero'
+	WHEN DATE_PART('MONTH', ce.fecha) = 2 THEN 'Febrero'
+	WHEN DATE_PART('MONTH', ce.fecha) = 3 THEN 'Marzo'
+	WHEN DATE_PART('MONTH', ce.fecha) = 4 THEN 'Abril'
+	WHEN DATE_PART('MONTH', ce.fecha) = 5 THEN 'Mayo'
+	WHEN DATE_PART('MONTH', ce.fecha) = 6 THEN 'Junio'
+	WHEN DATE_PART('MONTH', ce.fecha) = 7 THEN 'Julio'
+	WHEN DATE_PART('MONTH', ce.fecha) = 8 THEN 'Agosto'
+	WHEN DATE_PART('MONTH', ce.fecha) = 9 THEN 'Setiembre'
+	WHEN DATE_PART('MONTH', ce.fecha) = 10 THEN 'Octubre'
+	WHEN DATE_PART('MONTH', ce.fecha) = 11 THEN 'Noviembre'
+	WHEN DATE_PART('MONTH', ce.fecha) = 12 THEN 'Diciembre'
+	END AS mes, DATE_PART('MONTH', ce.fecha) AS numero
+FROM
+	Correspondencia_Externa AS ce,Unidad as u1, Unidad as u2
+WHERE
+	DATE_PART('YEAR',ce.fecha) = $P{anio} AND ce.unidad = u1.codigo AND u2.codigo = REPLACE(SUBSTRING(u1.codigo,1,2),'.','')
+GROUP BY
+	facultad,u1.codigo, u1.nombre, numero, mes
+ORDER BY facultad,u1.codigo;]]>
+	</queryString>
+	<field name="codigo" class="java.lang.String"/>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="facultad" class="java.lang.String"/>
+	<field name="peso" class="java.lang.Double"/>
+	<field name="mes" class="java.lang.String"/>
+	<field name="numero" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="168" splitType="Stretch">
+			<staticText>
+				<reportElement x="13" y="26" width="555" height="20" forecolor="#999999" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Left">
+					<font fontName="Lucida Bright" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PROGRAMA DE ABASTECIMIENTO Y APOYO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="46" width="555" height="20" forecolor="#999999"/>
+				<textElement textAlignment="Left">
+					<font fontName="Lucida Bright" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[OFICINA POSTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="13" y="6" width="555" height="20" forecolor="#999999" backcolor="#CCFF66"/>
+				<textElement textAlignment="Left">
+					<font fontName="Lucida Bright" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[UNIVERSIDAD NACIONAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="48" y="96" width="707" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Lucida Bright" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Informe de Peso en Kilogramos de Correspondencia Expedida por Unidad]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="353" y="116" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Lucida Bright" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Año " + $P{anio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageFooter>
+		<band height="20">
+			<textField evaluationTime="Report">
+				<reportElement x="755" y="0" width="40" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="675" y="0" width="80" height="20"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="126" splitType="Stretch">
+			<crosstab>
+				<reportElement x="0" y="0" width="795" height="126"/>
+				<crosstabHeaderCell>
+					<cellContents>
+						<staticText>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="140" height="30"/>
+							<box>
+								<topPen lineWidth="0.5"/>
+								<leftPen lineWidth="0.5"/>
+							</box>
+							<textElement verticalAlignment="Middle">
+								<font fontName="DejaVu Serif"/>
+							</textElement>
+							<text><![CDATA[Organización]]></text>
+						</staticText>
+					</cellContents>
+				</crosstabHeaderCell>
+				<rowGroup name="facultad" width="70" totalPosition="End">
+					<bucket>
+						<bucketExpression class="java.lang.String"><![CDATA[$F{facultad}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="63"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="DejaVu Serif" size="8"/>
+								</textElement>
+								<textFieldExpression class="java.lang.String"><![CDATA[$V{facultad}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#005FB3" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="140" height="25" forecolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Serif" size="8"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<rowGroup name="nombre" width="70" totalPosition="End">
+					<bucket>
+						<bucketExpression class="java.lang.String"><![CDATA[$F{nombre}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="70" height="38"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="DejaVu Serif" size="8"/>
+								</textElement>
+								<textFieldExpression class="java.lang.String"><![CDATA[$V{nombre}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="70" height="25"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Serif" size="8"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="numero" height="0" totalPosition="End">
+					<bucket>
+						<bucketExpression class="java.lang.Double"><![CDATA[$F{numero}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="0"/>
+								<textElement/>
+								<textFieldExpression class="java.lang.Double"><![CDATA[$V{numero}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#005FB3" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="50" height="30" forecolor="#FFFFFF"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="DejaVu Serif" size="8"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<columnGroup name="mes" height="30" totalPosition="End">
+					<bucket>
+						<bucketExpression class="java.lang.String"><![CDATA[$F{mes}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="30"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="DejaVu Serif" size="8"/>
+								</textElement>
+								<textFieldExpression class="java.lang.String"><![CDATA[$V{mes}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+							</box>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="pesoMeasure" class="java.lang.Double" calculation="Sum">
+					<measureExpression><![CDATA[$F{peso}]]></measureExpression>
+				</measure>
+				<crosstabCell width="50" height="38">
+					<cellContents>
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="38"/>
+							<textElement verticalAlignment="Middle">
+								<font fontName="DejaVu Serif" size="8"/>
+							</textElement>
+							<textFieldExpression class="java.lang.Float"><![CDATA[$V{pesoMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="facultad">
+					<cellContents backcolor="#005FB3" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF"/>
+							<textElement verticalAlignment="Middle">
+								<font fontName="DejaVu Serif" size="8"/>
+							</textElement>
+							<textFieldExpression class="java.lang.Float"><![CDATA[$V{pesoMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" height="38" columnTotalGroup="numero">
+					<cellContents backcolor="#005FB3" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="38" forecolor="#FFFFFF"/>
+							<textElement verticalAlignment="Middle">
+								<font fontName="DejaVu Serif" size="8"/>
+							</textElement>
+							<textFieldExpression class="java.lang.Float"><![CDATA[$V{pesoMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="facultad" columnTotalGroup="numero">
+					<cellContents backcolor="#005FB3" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF"/>
+							<textElement verticalAlignment="Middle">
+								<font fontName="DejaVu Serif" size="8"/>
+							</textElement>
+							<textFieldExpression class="java.lang.Float"><![CDATA[$V{pesoMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="0" height="38" columnTotalGroup="mes">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="0" rowTotalGroup="facultad" columnTotalGroup="mes">
+					<cellContents backcolor="#005FB3" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="nombre">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement verticalAlignment="Middle">
+								<font fontName="DejaVu Serif" size="8"/>
+							</textElement>
+							<textFieldExpression class="java.lang.Float"><![CDATA[$V{pesoMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="nombre" columnTotalGroup="numero">
+					<cellContents backcolor="#005FB3" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF"/>
+							<textElement verticalAlignment="Middle">
+								<font fontName="DejaVu Serif" size="8"/>
+							</textElement>
+							<textFieldExpression class="java.lang.Float"><![CDATA[$V{pesoMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="0" rowTotalGroup="nombre" columnTotalGroup="mes">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#000000"/>
+						</box>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+		</band>
+	</summary>
+</jasperReport>

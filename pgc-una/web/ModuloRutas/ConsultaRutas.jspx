@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Control de Cambios
+    
+    Lista de requerimientos:
+        * Funcionales:
+            * Consulta por cada uno de los campos del formulario
+
+        * No funcionales:
+            * Limpiar el formulario
+            * Limpiar la consulta
+
+    Material Con
+sultado: http://component-showcase.icefaces.org/component-showcase/showcase.iface.
+    Ayuda externa: Allam Chaves Zamora.
+
+-->
+
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <title>UNA | Oficina Postal | Consulta de Información de Correspondencia Generada en Rutas</title>
+                <ice:outputStyle href="../resources/rime/rime.css" id="rimeStyle"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+            </head>
+            <body>
+                <table width="100%" style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" disabled="#{SeguridadManagedBean.isNotEmpleado}" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td>
+                            <p align="right">
+                                <ice:outputText id="ot_navegacion" value="Correspondencia Interna - Externa por Mensajero Propio | Consulta de Envíos" />
+                            </p>
+                            <table width="100%" align="center" >
+                                <tr valign="top">
+                                    <td valign="top">
+                                        <ice:form id="frm_formulario">                                            
+                                            <ice:panelGrid id="pgrd_formulario" columns="2">
+                                                <f:facet name="header">
+                                                    <ice:outputText id="ot_TituloFormulario" value="Ingrese la información conocida para realizar la consulta." />
+                                                </f:facet>
+
+                                                <ice:outputText id="ot_unidadRF" value="Procedencia:" />
+                                                <ice:selectInputText id="sit_unidadRF" value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.registroConsulta.procedenciaUnidad}"
+                                                                     rows="#{UnidadFacadeManaged.cantidadUnidades}"
+                                                                     valueChangeListener="#{UnidadFacadeManaged.valueChange_sit_unidadAutocompletar}" width="115px">
+                                                    <f:selectItems id="sits_remitente" value="#{UnidadFacadeManaged.unidadAutoCompletar}"/>
+                                                </ice:selectInputText>
+
+                                                <ice:outputText id="ot_oficioF" value="Número de Oficio:"/>
+                                                <ice:selectInputText id="sit_oficioF" value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.registroConsulta.codigo}" width="115px"/>
+
+                                                <ice:outputText id="ot_tipoCF" value="Tipo de Correspondencia:" />
+                                                <ice:selectInputText id="sit_tipoCF"
+                                                                     rows="#{CorrespondenciaInternaFacadeManaged.cantidadTipos}"
+                                                                     value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.registroConsulta.tipo}"
+                                                                     valueChangeListener="#{CorrespondenciaInternaFacadeManaged.valueChange_sit_tiposAutocompletar}" width="115px">
+                                                    <f:selectItems id="sits_tipo" value="#{CorrespondenciaInternaFacadeManaged.tipoAutocompletar}"/>
+                                                </ice:selectInputText>
+
+                                                <ice:outputText id="ot_fechaIngreso" value="Fecha de entrega al mensajero:" />
+                                                <ice:selectInputDate id="sid_fechaIngreso" value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.registroConsulta.fechaEntregaMensajero}" renderAsPopup="true">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                </ice:selectInputDate>                                                
+
+                                                <ice:outputText id="ot_mensajeroEntrega" value="Mensajero que recibió la correspondencia: " />
+                                                <ice:selectInputText id="sit_mensajeroEntrega" partialSubmit="true" value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.empleadoEntrToString}"
+                                                                     rows="#{CorrespondenciaInternaFacadeManaged.cantidadEmpleados}" valueChangeListener="#{CorrespondenciaInternaFacadeManaged.valueChange_sit_empleadoAutoCompletarC1}" width="115px">
+                                                    <f:selectItems id="sits_mensajero" value="#{CorrespondenciaInternaFacadeManaged.empleadoAutoCompletar}"/>
+                                                </ice:selectInputText>
+
+                                                <ice:outputText id="ot_destinatario" value="Destinatario:" />
+                                                <ice:selectInputText id="sit_destinatario" value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.registroConsulta.destinatario}" width="115px"/>
+
+                                                <ice:outputText id="ot_unidadDF" value="Unidad de destino:" />
+                                                <ice:selectInputText id="sit_unidadDF" value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.registroConsulta.destinoUnidad}"
+                                                                     rows="#{UnidadFacadeManaged.cantidadUnidades}"
+                                                                     valueChangeListener="#{UnidadFacadeManaged.valueChange_sit_unidadAutocompletar}" width="115px">
+                                                    <f:selectItems id="sits_remitente" value="#{UnidadFacadeManaged.unidadAutoCompletar}"/>
+                                                </ice:selectInputText>
+
+                                                <ice:outputText id="ot_persona" value="Persona que lo recibió"/>
+                                                <ice:selectInputText id="sit_persona" value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.registroConsulta.nombreRecibido}" width="115px"/>
+
+                                                <ice:outputText id="ot_fechaRecibido" value="Fecha en la que fué recibido: " />
+                                                <ice:selectInputDate id="sit_fechaRecibido" value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.registroConsulta.fechaRecibido}" renderAsPopup="true">
+                                                    <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                </ice:selectInputDate>
+
+                                                <ice:outputText id="ot_responsable" value="Mensajero responsable: " />
+                                                <ice:selectInputText id="sit_responsable" partialSubmit="true" value="#{CorrespondenciaInternaFacadeManaged.auxCorrespondenciaInterna.empleadoRespToString}" disabled="#{CorrespondenciaInternaFacadeManaged.mensajeroInactivo}"
+                                                                     rows="#{CorrespondenciaInternaFacadeManaged.cantidadEmpleados}" valueChangeListener="#{CorrespondenciaInternaFacadeManaged.valueChange_sit_empleadoAutoCompletarC2}" width="115px">
+                                                    <f:selectItems id="sits_mensajero" value="#{CorrespondenciaInternaFacadeManaged.empleadoAutoCompletar}"/>
+                                                </ice:selectInputText>
+                                                <br />
+                                            </ice:panelGrid>
+                                        </ice:form>
+                                        <ice:form id="frm_botones">
+                                            <ice:panelGrid id="pgrd_botones" columns="2" cellspacing="30">
+                                                <p align="center">
+                                                    <ice:panelConfirmation id="pcfr_consulta" acceptLabel="Si" cancelLabel="No" message="¿Desea que la consulta se realice con esta información?"
+                                                                           autoCentre="true" title="¡Atención!"/>
+                                                    <ice:panelGrid id="pgrd_botonesF" columns="2" cellspacing="15">                                                        
+                                                        <ice:commandButton id="cb_consultar" value="Consultar" partialSubmit="true" panelConfirmation="pcfr_consulta" actionListener="#{CorrespondenciaInternaFacadeManaged.action_cb_generarConsulta}"/>
+                                                        <ice:commandButton id="cb_limpiar" value="Limpiar formulario" partialSubmit="true" actionListener="#{CorrespondenciaInternaFacadeManaged.action_cb_limpiarFormulario}" />
+                                                    </ice:panelGrid>
+                                                </p>
+                                            </ice:panelGrid>
+                                        </ice:form>
+                                    </td>
+                                    <td valign="top">
+                                        <ice:form id="frm_consulta">
+                                            <ice:panelCollapsible id="pclp_principal" expanded="true" style="width: 100%; height: 100%;">
+                                                <f:facet name="header">
+                                                    <ice:panelGroup>
+                                                        <ice:outputText id="ot_linkHeader" value="Información Consultada">
+                                                        </ice:outputText>
+                                                    </ice:panelGroup>
+                                                </f:facet>
+                                                <ice:panelGroup id="pgrp_principal">
+                                                    <ice:dataTable border="2" id="dt_tablaConsulta" value="#{CorrespondenciaInternaFacadeManaged.consulta}" var="registro">
+                                                        <ice:column id="dc_unidad">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_unidad" value="Unidad Remitente"/>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_remitente" value="#{registro.procedenciaUnidad}"/>
+                                                        </ice:column>
+                                                        <ice:column id="dc_oficio">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_oficio" value="Número de Oficio"/>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_oficioC" value="#{registro.codigo}" />
+                                                        </ice:column>
+                                                        <ice:column id="dc_tipo">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_tipo" value="Tipo de Correspondencia"/>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_tipoC" value="#{registro.tipo.descripcion}" />
+                                                        </ice:column>                                                        
+                                                        <ice:column id="dc_destinatario">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_destinatario" value="Destinatario"/>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_destinatarioC" value="#{registro.destinatario}" />
+                                                        </ice:column>
+                                                        <ice:column id="dc_destino">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_destino" value="Unidad Destino"/>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_destinoC" value="#{registro.destinoUnidad}" />
+                                                        </ice:column>
+                                                        <ice:column id="dc_persona">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_persona" value="Persona que lo recibió"/>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_personaC" value="#{registro.nombreRecibido}"/>
+                                                        </ice:column>
+                                                        <ice:column id="dc_fecha">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_fecha" value="Fecha Recibido"/>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_fechaC" value="#{registro.fechaRecibido}">
+                                                                <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                            </ice:outputText>
+                                                        </ice:column>
+                                                        <ice:column id="dc_mensajero">
+                                                            <f:facet name="header">
+                                                                <ice:outputText id="ot_mensajero" value="Mensajero Responsable"/>
+                                                            </f:facet>
+                                                            <ice:outputText id="ot_mensajeroC" value="#{registro.idEntregaEmpleado.nombre} #{registro.idEntregaEmpleado.middleName} #{registro.idEntregaEmpleado.apellidos}" />
+                                                        </ice:column>
+                                                    </ice:dataTable>
+                                                    <p align="center">
+                                                        <ice:commandButton id="cb_borrarC" value="Borrar consulta" actionListener="#{CorrespondenciaInternaFacadeManaged.action_cb_limpiarConsulta}"/>
+                                                    </p>
+                                                </ice:panelGroup>
+                                            </ice:panelCollapsible>
+                                        </ice:form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">                            
+                            <ice:panelGroup styleClass="footer" effect="#{CorrespondenciaInternaFacadeManaged.efecto}" >
+                                <ice:outputText id="south" value="#{CorrespondenciaInternaFacadeManaged.infoFooter}"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>

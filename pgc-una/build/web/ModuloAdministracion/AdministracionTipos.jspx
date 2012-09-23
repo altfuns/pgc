@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : pgc-una
+    Created on : 15/03/2010, 09:02:08 AM
+    Author     : red
+-->
+<jsp:root version="2.1" xmlns:f="http://java.sun.com/jsf/core" xmlns:h="http://java.sun.com/jsf/html" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:ice="http://www.icesoft.com/icefaces/component">
+    <jsp:directive.page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8"/>
+    <f:view>
+        <html>
+            <head>
+                <ice:outputStyle href="../resources/rime/rime.css" id="outputStyle2"/>
+                <ice:outputStyle href="../resources/paneles.css" id="panelesStyle"/>
+                <title>UNA | Oficina Postal | Administración de Tipos</title>
+            </head>
+            <body>                
+                <table style="height:100%; vertical-align: top;">
+                    <tr>
+                        <td colspan="2" valign="top">
+                            <ice:panelGrid columns="2" cellspacing="10" styleClass="headerGrid">
+                                <img src="../resources/images/logoUNA.png" alt="Logotipo UNA" align="left"/>
+                                <img src="../resources/images/pgc2.png" alt="Logotipo PGC" align="left" />
+                            </ice:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="top">
+                            <ice:form id="frm_Menu">
+                                <ice:panelGroup id="pgrp_menu" styleClass="menu">
+                                    <ice:panelGrid id="pgrd_menu" columns="1">
+                                        <ice:menuBar id="mb_menu"
+                                                     orientation="Vertical">
+
+                                            <ice:menuItem value="Inicio" id="mi_home" link="#{SeguridadManagedBean.linkBienvenida}" />
+
+                                            <ice:menuItem value="Interna - Externa"
+                                                          id="mi_interna" onclick="return false;" >
+                                                <ice:menuItems id="mits_rutas" value="#{SeguridadManagedBean.itemesRutas}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Correos de Costa Rica"
+                                                          id="mi_edit" onclick="return false;" >
+                                                <ice:menuItems id="mits_externa" value="#{SeguridadManagedBean.itemesExterna}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Administración"
+                                                          id="mi_administracion" onclick="return false;" >
+                                                <ice:menuItems id="mits_admon" value="#{SeguridadManagedBean.itemesAdministracion}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Estadística"
+                                                          id="mi_estadistica" onclick="return false;" >
+                                                <ice:menuItems id="mits_estadistica" value="#{SeguridadManagedBean.itemesEstadistica}" />
+                                            </ice:menuItem>
+
+                                            <ice:menuItem value="Salir" id="mi_salir" actionListener="#{SeguridadManagedBean.action_mi_salir}" />
+                                        </ice:menuBar>
+                                    </ice:panelGrid>
+                                </ice:panelGroup>
+                            </ice:form>
+                        </td>
+                        <td width="100%" valign="top" style="height:100%">
+                            <ice:form id="frm_principal">
+                                <p align="right">
+                                    <ice:outputText id="ot_navegacion" value="Administración | Administración de Tipos de Envíos Internos" />
+                                </p>
+                                <ice:panelGrid id="pgrd_principal" columns="2" width="100%">
+                                    <ice:panelGroup id="pgrp_ingreso">
+                                        <ice:panelGrid id="pgrd_ingreso" columns="2">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_ingresoT" value="Ingrese la información necesaria para agregar la unidad" />
+                                            </f:facet>
+                                            <br /><br />
+                                            <ice:outputText id="ot_acron" value="Siglas: " />
+                                            <ice:inputText id="it_acron" partialSubmit="true" value="#{TipoInternoFacadeManaged.nuevasSiglas}" maxlength="5" />
+                                            <ice:outputText id="ot_descripcion" value="Descripción: " />
+                                            <ice:inputText id="it_descripcion" partialSubmit="true" value="#{TipoInternoFacadeManaged.nuevaDesc}" maxlength="30" />
+                                        </ice:panelGrid>
+                                        <br />
+                                        <ice:panelConfirmation id="pcrf_ingreso" acceptLabel="Si" cancelLabel="No" autoCentre="true"
+                                                               title="¡Atención!" message="¿Desea realmente agregar el tipo #{TipoInternoFacadeManaged.nuevaDesc}, con las siglas #{TipoInternoFacadeManaged.nuevasSiglas}" />
+                                        <ice:commandButton id="cb_ingreso" value="Guardar" panelConfirmation="pcrf_ingreso" partialSubmit="true" actionListener="#{TipoInternoFacadeManaged.action_cb_guardarTipo}" />
+                                    </ice:panelGroup>                           
+                                    <ice:dataTable id="dt_consulta" width="100%" rows="#{TipoInternoFacadeManaged.cantidadTipos}" var="nodo" value="#{TipoInternoFacadeManaged.tipos}">
+                                        <ice:column id="dc_acron">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_acronT" value="Siglas" />
+                                            </f:facet>
+                                            <ice:outputText id="ot_acronC" value="#{nodo.acron}" />
+                                        </ice:column>
+                                        <ice:column id="dc_descripcion">
+                                            <f:facet name="header">
+                                                <ice:outputText id="ot_descripcionT" value="Descripción" />
+                                            </f:facet>
+                                            <ice:outputText id="ot_descripcionC" value="#{nodo.descripcion}" />
+                                        </ice:column>
+                                    </ice:dataTable>
+                                </ice:panelGrid>
+                            </ice:form>
+                            <ice:form id="frm_paneles">
+                                <ice:panelPopup id="ppop_errores"
+                                                draggable="false" modal="true"
+                                                visible="#{TipoInternoFacadeManaged.errorVisible}"
+                                                styleClass="corePopup">
+                                    <f:facet name="header">
+                                        <ice:panelGroup styleClass="popupHeaderWrapper">
+                                            <ice:outputText
+                                                value="Error"
+                                                styleClass="popupHeaderText"/>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                    <f:facet name="body">
+                                        <ice:panelGroup styleClass="popupBody">
+                                            <ice:outputText value="#{TipoInternoFacadeManaged.mensajeError}"/><br/>
+                                            <p align="center">
+                                                <ice:commandButton id="modalPnlCloseButton" type="submit"
+                                                                   value="Cerrar" actionListener="#{TipoInternoFacadeManaged.action_cb_cerrarPopup}" /></p>
+                                        </ice:panelGroup>
+                                    </f:facet>
+                                </ice:panelPopup>
+                            </ice:form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ice:panelGroup styleClass="footer" effect="#{TipoInternoFacadeManaged.efecto}">
+                                <ice:outputText id="south" value="#{TipoInternoFacadeManaged.infoFooter}"/>
+                            </ice:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+        </html>
+    </f:view>
+</jsp:root>
